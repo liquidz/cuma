@@ -58,4 +58,13 @@
   (testing "nested multiline loop"
     (are [x y] (= x (str/replace y #"\s" ""))
       "xyxyxyxy" (render "#(for [x arr1] #\n #(for [y arr2] #\n xy \n#)# \n#)#"         {:arr1 [1 2] :arr2 [4 5]})
-      "14152425" (render "#(for [x arr1] #\n #(for [y arr2] #\n #(x)##(y)# \n#)# \n#)#" {:arr1 [1 2] :arr2 [4 5]}))))
+      "14152425" (render "#(for [x arr1] #\n #(for [y arr2] #\n #(x)##(y)# \n#)# \n#)#" {:arr1 [1 2] :arr2 [4 5]})))
+
+  (testing "lambda"
+    (are [x y] (= x y)
+      "FOO" (render "#(f \"foo\")#" {:f #(.toUpperCase %)})))
+
+  (testing "lambda for multiline"
+    (are [x y] (= x (str/replace y #"\s" ""))
+      "FOO" (render "#(f #\n foo \n#)#" {:f #(map (fn [s] (.toUpperCase s)) %)})))
+  )
