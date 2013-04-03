@@ -7,7 +7,12 @@
   (testing "no variable"
     (are [x y] (= x y)
       ""    (render ""    {})
-      "foo" (render "foo" {})))
+      "foo" (render "foo" {})
+      "3"   (render "=(+ 1 2)=" {})
+
+      ""    (render "")
+      "foo" (render "foo")
+      "3"   (render "=(+ 1 2)=")))
 
   (testing "simple variable"
     (are [x y] (= x y)

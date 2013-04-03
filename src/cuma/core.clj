@@ -20,9 +20,11 @@
       (as-> s (str "(\"" s "\")"))
       read-string))
 
-(defn render [s data]
-  (let [m (key-map->sym-map data)]
-    (->> (read* s)
-         (map #(if (sequential? %) (evil m %) %))
-         flatten
-         (str/join ""))))
+(defn render
+  ([s] (render s {}))
+  ([s data]
+   (let [m (key-map->sym-map data)]
+     (->> (read* s)
+          (map #(if (sequential? %) (evil m %) %))
+          flatten
+          (str/join "")))))
