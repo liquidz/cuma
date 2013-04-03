@@ -1,6 +1,7 @@
 (ns cuma.core
   "S-expression based micro template in clojure"
   (:require
+    [cuma.plugin    :refer [collect-plugin-functions-memo]]
     [evalive.core   :refer [evil]]
     [clojure.string :as    str]))
 
@@ -23,7 +24,8 @@
 (defn render
   ([s] (render s {}))
   ([s data]
-   (let [m (key-map->sym-map data)]
+   (let [m (merge (collect-plugin-functions-memo)
+                  (key-map->sym-map data))]
      (->> (read* s)
           (map #(if (sequential? %) (evil m %) %))
           flatten
