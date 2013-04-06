@@ -7,6 +7,13 @@
     [evalive.core    :refer [evil]]
     [clojure.string  :as    str]))
 
+(def ^:dynamic *current-arg* {})
+;(declare render)
+
+;(defn include
+;  [s]
+;  (render s *current-arg*))
+
 (defn- key-map->sym-map [m] (into {} (map (fn [[k v]] [(symbol (name k)) v]) m)))
 (defn- escape-quote     [s] (str/replace s "\"" "\\\""))
 (defn- unescape-quote   [s] (str/replace s "\\\"" "\""))
@@ -29,9 +36,8 @@
 (defn render
   ([s] (render s {}))
   ([s data]
-   (let [m (merge (collect-plugin-functions-memo) (key-map->sym-map data))]
+   (binding [*current-arg* data]
      (->> (read* s)
-          (evil m)
+          (evil (merge (collect-plugin-functions-memo) (key-map->sym-map data)))
           flatten
           (str/join "")))))
-

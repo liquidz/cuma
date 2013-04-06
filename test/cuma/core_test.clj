@@ -89,8 +89,4 @@
 
   (testing "lambda"
     (are [x y] (= x y)
-      "FOO" (render "$(f \"foo\")" {:f #(.toUpperCase %)})))
-
-  (testing "core extension"
-    (are [x y] (= x y)
-      "&lt;h1&gt;" (render "$(escape x)" {:x "<h1>"}))))
+      "FOO" (render "$(f \"foo\")" {:f #(.toUpperCase %)}))))
