@@ -16,8 +16,11 @@
 (defn transform-sexp
   [s]
   (let [[[_ type sexp]] (re-seq #"^(.)\((.+)\)$" s)
-        sexp (str/trim sexp)]
-    (case type
-      "$" (transform-expression sexp)
-      "@" (transform-syntax sexp))))
+        sexp (some-> sexp str/trim)]
+    (if (and sexp (not (str/blank? sexp)))
+      (case type
+        "$" (transform-expression sexp)
+        "@" (transform-syntax sexp)
+        s)
+      s)))
 

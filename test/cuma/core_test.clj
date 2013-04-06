@@ -31,6 +31,10 @@
       "foo" (render "f$(x)" {:x "oo"})
       "foo" (render "$(x)o" {:x "fo"})))
 
+  (testing "complex pattern"
+    (are [x y] (= x y)
+      "$(b)-c" (render "$(a)-$(b)", {:a "$(b)" :b "c"})))
+
   (testing "condition"
     (are [x y] (= x y)
       "foo" (render "$(if (= 1 1) 'foo)"   {})
@@ -81,9 +85,12 @@
       "xyxyxyxy" (render "@(for [x arr1]) @(for [y arr2]) xy @(/for) @(/for)"
                          {:arr1 [1 2] :arr2 [4 5]})
       "14152425" (render "@(for [x arr1]) @(for [y arr2]) $(x)$(y)  @(/for) @(/for)"
-                         {:arr1 [1 2] :arr2 [4 5]})
-      ))
+                         {:arr1 [1 2] :arr2 [4 5]})))
 
   (testing "lambda"
     (are [x y] (= x y)
-      "FOO" (render "$(f \"foo\")" {:f #(.toUpperCase %)}))))
+      "FOO" (render "$(f \"foo\")" {:f #(.toUpperCase %)})))
+
+  (testing "core extension"
+    (are [x y] (= x y)
+      "&lt;h1&gt;" (render "$(escape x)" {:x "<h1>"}))))

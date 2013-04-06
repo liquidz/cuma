@@ -7,12 +7,9 @@
     [evalive.core    :refer [evil]]
     [clojure.string  :as    str]))
 
-(defn- key-map->sym-map
-  [m]
-  (into {} (map (fn [[k v]] [(symbol (name k)) v]) m)))
-
-(defn- escape-quote [s] (str/replace s "\"" "\\\""))
-(defn- unescape-quote [s] (str/replace s "\\\"" "\""))
+(defn- key-map->sym-map [m] (into {} (map (fn [[k v]] [(symbol (name k)) v]) m)))
+(defn- escape-quote     [s] (str/replace s "\"" "\\\""))
+(defn- unescape-quote   [s] (str/replace s "\\\"" "\""))
 
 (defn- index-fn
   [& targets]
