@@ -1,4 +1,4 @@
-(ns cuma.plugin.core
+(ns cuma.extension.core
   (:require [clojure.string :as str]))
 
 (defn include

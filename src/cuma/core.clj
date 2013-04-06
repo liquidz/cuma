@@ -3,16 +3,11 @@
   (:require
     [cuma [replace   :refer [replace-sexp]]
           [transform :refer [transform-sexp]]
-          [plugin    :refer [collect-plugin-functions-memo]]]
+          [extension :refer [collect-extension-functions-memo]]]
     [evalive.core    :refer [evil]]
     [clojure.string  :as    str]))
 
 (def ^:dynamic *current-arg* {})
-;(declare render)
-
-;(defn include
-;  [s]
-;  (render s *current-arg*))
 
 (defn- key-map->sym-map [m] (into {} (map (fn [[k v]] [(symbol (name k)) v]) m)))
 (defn- escape-quote     [s] (str/replace s "\"" "\\\""))
@@ -38,6 +33,6 @@
   ([s data]
    (binding [*current-arg* data]
      (->> (read* s)
-          (evil (merge (collect-plugin-functions-memo) (key-map->sym-map data)))
+          (evil (merge (collect-extension-functions-memo) (key-map->sym-map data)))
           flatten
           (str/join "")))))

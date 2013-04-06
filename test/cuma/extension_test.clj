@@ -1,23 +1,23 @@
-(ns cuma.plugin-test
-  (:require [cuma [plugin   :refer :all]
-                  [core     :refer [render]]]
-            [clojure.test   :refer :all]
-            [clojure.string :as str]))
+(ns cuma.extension-test
+  (:require [cuma [extension :refer :all]
+                  [core      :refer [render]]]
+            [clojure.test    :refer :all]
+            [clojure.string  :as str]))
 
-(deftest collect-plugin-functions
-  (let [m (#'cuma.plugin/collect-plugin-functions)]
+(deftest collect-extension-functions
+  (let [m (#'cuma.extension/collect-extension-functions)]
     (is (contains? m 'include))
     (is (contains? m 'escape))
-    (is (not (contains? m 'collect-plugin-functions-memo)))
+    (is (not (contains? m 'collect-extension-functions-memo)))
     (is (not (contains? m 'does-not-exists))))
 
-  (binding [*plugin-ns-regexp* #"^cuma\."]
+  (binding [*extension-ns-regexp* #"^cuma\."]
     (require 'cuma.core)
-    (let [m (#'cuma.plugin/collect-plugin-functions)]
+    (let [m (#'cuma.extension/collect-extension-functions)]
       (is (contains? m 'include))
       (is (contains? m 'escape))
       (is (contains? m 'render))
-      (is (contains? m 'collect-plugin-functions-memo)))))
+      (is (contains? m 'collect-extension-functions-memo)))))
 
 
 (deftest core-functions-test
