@@ -2,6 +2,8 @@
 
 S-expression based micro template in clojure.
 
+[![Build Status](https://travis-ci.org/liquidz/cuma.png?branch=master)](https://travis-ci.org/liquidz/cuma)
+
 ## Example
 
 ```clojure
