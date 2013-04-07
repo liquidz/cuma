@@ -8,10 +8,17 @@
   []
   (filter #(re-seq *extension-ns-regexp* (str (ns-name %))) (all-ns)))
 
+
+(defn- extension-publics
+  [ns-sym]
+  (into {} (map #(let [{name :name, ename :extension-name} (meta %)]
+                   [(keyword (if ename ename name)) %])
+                (vals (ns-publics ns-sym)))))
+
 (defn- collect-extension-functions
   []
   (reduce
-    #(merge % (ns-publics %2))
+    #(merge % (extension-publics %2))
     {} (find-extension-namespaces)))
 
 (def collect-extension-functions-memo

@@ -1,30 +1,45 @@
 (ns cuma.extension-test
   (:require [cuma [extension :refer :all]
-                  [core      :refer [render]]]
-            [clojure.test    :refer :all]
-            [clojure.string  :as str]))
+                    [core      :refer [render]]]
+            [clojure.test      :refer :all]
+            [clojure.string    :as str]))
 
 (deftest collect-extension-functions
   (let [m (#'cuma.extension/collect-extension-functions)]
-    (is (contains? m 'include))
-    (is (contains? m 'escape))
-    (is (not (contains? m 'collect-extension-functions-memo)))
-    (is (not (contains? m 'does-not-exists))))
+    (are [x y] (= x (contains? m y))
+      true  :escape
+      true  :if
+      true  :for
+      false :collect-extension-functions-memo
+      false :does-not-exists))
 
   (binding [*extension-ns-regexp* #"^cuma\."]
     (require 'cuma.core)
     (let [m (#'cuma.extension/collect-extension-functions)]
-      (is (contains? m 'include))
-      (is (contains? m 'escape))
-      (is (contains? m 'render))
-      (is (contains? m 'collect-extension-functions-memo)))))
+      (are [x y] (= x (contains? m y))
+        true  :escape
+        true  :if
+        true  :for
+        true  :collect-extension-functions-memo
+        false :does-not-exists))))
 
 
 (deftest core-functions-test
+  (testing "if"
+    (are [x y] (= x y)
+      "foo" (render "@(if flag) foo @(/if)" {:flag true})
+      "foo" (render "@(if flag) $(x) @(/if)" {:flag true :x "foo"})))
+
+  (testing "for"
+    (are [x y] (= x y)
+      "xxx" (render "@(for arr) x @(/for)" {:arr [1 2 3]})
+      "123" (render "@(for arr) $(.) @(/for)" {:arr [1 2 3]})
+      "123" (render "@(for arr) $(n) @(/for)" {:arr [{:n 1} {:n 2} {:n 3}]})))
+
   (testing "include"
     (are [x y] (= x y)
       "hello world" (render "hello $(include base)" {:base "$(x)" :x "world"})
-      "1234"        (render "$(x)$(include base)"   {:base "@(for [x arr])$(x)@(/for)"
+      "1234"        (render "$(x)$(include base)"   {:base "@(for arr)$(.)@(/for)"
                                                      :x "12" :arr [3 4]})))
 
   (testing "escape"
