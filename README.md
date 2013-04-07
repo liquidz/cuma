@@ -16,6 +16,9 @@ S-expression based micro template in clojure.
 (render "$(if flag \"foo\" \"bar\")" {:flag true})
 ;=> foo
 
+(render "@(for [x arr]) x = $(x) @(/for)" {:arr [1 2]})
+;=> x = 1 x = 2
+
 ; test.txt:
 ;   @(if flag)
 ;      hello $(x)
