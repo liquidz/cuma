@@ -31,7 +31,7 @@
       (if-let [body-end (index-of s end-str body-start)]
         {:f    f
          :args args
-         :body (str/trim (.substring s (inc body-start) body-end))
+         :body (str/triml (.substring s (inc body-start) body-end))
          :all  (.substring s from (+ body-end (count end-str)))}
         s))
     s))
@@ -64,3 +64,10 @@
       (render-section m)
       (render-variable m))))
 
+
+(defn -main []
+  ;(println (render "@(for arr)\n$(.)\n@(/for)" {:arr [1 2 3]}))
+  ;(println (render "@(foo)world@(/foo)" {:foo (fn [data body] (str "hello " body))}))
+  (println (render "$(include tmpl)" {:tmpl "hello $(x)" :x "world"}))
+
+  )

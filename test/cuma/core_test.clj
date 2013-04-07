@@ -38,11 +38,11 @@
 
   (testing "simple"
     (are [x y] (= x y)
-      "bar" (#'cuma.core/render-section "@(foo x) bar @(/foo)" {:foo (fn [_ body _] body) :x "baz"})
-      "baz" (#'cuma.core/render-section "@(foo x) bar @(/foo)" {:foo (fn [data _ _] (:x data)) :x "baz"})
-      "baz" (#'cuma.core/render-section "@(foo x) bar @(/foo)" {:foo (fn [_ _ arg] arg) :x "baz"})
-      "baz" (#'cuma.core/render-section "@(foo x y) bar @(/foo)" {:foo (fn [_ _ a1 a2] a1) :x "baz" :y "foo"})
-      "foo" (#'cuma.core/render-section "@(foo x y) bar @(/foo)" {:foo (fn [_ _ a1 a2] a2) :x "baz" :y "foo"})))
+      "bar" (#'cuma.core/render-section "@(foo x)bar@(/foo)" {:foo (fn [_ body _] body) :x "baz"})
+      "baz" (#'cuma.core/render-section "@(foo x)bar@(/foo)" {:foo (fn [data _ _] (:x data)) :x "baz"})
+      "baz" (#'cuma.core/render-section "@(foo x)bar@(/foo)" {:foo (fn [_ _ arg] arg) :x "baz"})
+      "baz" (#'cuma.core/render-section "@(foo x y)bar@(/foo)" {:foo (fn [_ _ a1 a2] a1) :x "baz" :y "foo"})
+      "foo" (#'cuma.core/render-section "@(foo x y)bar@(/foo)" {:foo (fn [_ _ a1 a2] a2) :x "baz" :y "foo"})))
 
   (testing "error"
     (are [x y] (= x y)
@@ -55,4 +55,4 @@
 (deftest render-test
   (are [x y] (= x y)
     "foo"     (render "$(x)" {:x "foo"})
-    "foo bar" (render "$(x) @(foo) bar @(/foo)" {:x "foo" :foo (fn [_ b] b)})))
+    "foo bar" (render "$(x) @(foo)bar@(/foo)" {:x "foo" :foo (fn [_ b] b)})))

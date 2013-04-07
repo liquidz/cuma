@@ -27,14 +27,14 @@
 (deftest core-functions-test
   (testing "if"
     (are [x y] (= x y)
-      "foo" (render "@(if flag) foo @(/if)" {:flag true})
-      "foo" (render "@(if flag) $(x) @(/if)" {:flag true :x "foo"})))
+      "foo" (render "@(if flag)foo@(/if)" {:flag true})
+      "foo" (render "@(if flag)$(x)@(/if)" {:flag true :x "foo"})))
 
   (testing "for"
     (are [x y] (= x y)
-      "xxx" (render "@(for arr) x @(/for)" {:arr [1 2 3]})
-      "123" (render "@(for arr) $(.) @(/for)" {:arr [1 2 3]})
-      "123" (render "@(for arr) $(n) @(/for)" {:arr [{:n 1} {:n 2} {:n 3}]})))
+      "xxx" (render "@(for arr)x@(/for)" {:arr [1 2 3]})
+      "123" (render "@(for arr)$(.)@(/for)" {:arr [1 2 3]})
+      "123" (render "@(for arr)$(n)@(/for)" {:arr [{:n 1} {:n 2} {:n 3}]})))
 
   (testing "include"
     (are [x y] (= x y)
