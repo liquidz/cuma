@@ -25,6 +25,12 @@ S-expression based micro template in clojure.
 ;=> 1 2 3
 (render "@(for arr) $(n) @(/for)" {:arr [{:n 1} {:n 2} {:n 3}]})
 ;=> 1 2 3
+(render "@(for m) $(n) @(/for)" {:m {:n "foo"}})
+;=> foo
+
+(render "@(for arr1) @(for arr2) $(a)$(b) @(/for) @(/for)"
+        {:arr1 [{:a 1} {:a 2}] :arr2 [{:b 3} {:b 4}]})
+;=> 13 14 23 24
 
 (render "@(foo) world @(/foo)" {:foo (fn [data body] (str "hello " body))})
 ;=> hello world
@@ -36,6 +42,12 @@ S-expression based micro template in clojure.
 (render "$(include tmpl)" {:tmpl "hello $(x)" :x "world"})
 ;=> hello world
 ```
+
+```clojur
+; NOT SUPPORTED: nested variable
+(render "$(f (g x))" {...})
+```
+
 
 ## Extension
 
