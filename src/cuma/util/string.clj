@@ -28,8 +28,6 @@
            n (count (take-while (comp not nil?) (indexes-of x start)))]
        (if (zero? n)
          i
-         (nth (indexes-of s end (inc i)) (dec n) nil)
-         )
-       ))))
+         (nth (indexes-of s end (inc i)) (dec n) nil))))))
 
 

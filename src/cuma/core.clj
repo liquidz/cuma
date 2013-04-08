@@ -1,6 +1,6 @@
 (ns cuma.core
   (:require
-    [cuma.util.string :refer [index-of]]
+    [cuma.util.string :refer [index-of get-paired-index]]
     [cuma.extension   :refer [collect-extension-functions-memo]]
     [clojure.string   :as str]))
 
@@ -25,7 +25,8 @@
     (let [start-str   (str/trim (.substring s (+ 2 from) body-start))
           [f & args]  (str/split start-str #"\s")
           end-str     (str "@(/" f ")")]
-      (if-let [body-end (index-of s end-str body-start)]
+      ;(if-let [body-end (index-of s end-str body-start)]
+      (if-let [body-end (get-paired-index s (str "@(" f) end-str from)]
         {:f    f
          :args args
          :body (str/triml (.substring s (inc body-start) body-end))
@@ -41,7 +42,6 @@
      (let [{:keys [f args body all]} (parse-section s data sec-start)
            f    (get data (keyword f) NODATA)
            args (map #(get data (keyword %) NODATA) args)]
-
        (if (every? #(not= % NODATA) (cons f args))
          (let [res (apply f (concat (list data body) args))]
            (recur

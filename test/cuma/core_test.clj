@@ -44,6 +44,16 @@
       "baz" (#'cuma.core/render-section "@(foo x y)bar@(/foo)" {:foo (fn [_ _ a1 a2] a1) :x "baz" :y "foo"})
       "foo" (#'cuma.core/render-section "@(foo x y)bar@(/foo)" {:foo (fn [_ _ a1 a2] a2) :x "baz" :y "foo"})))
 
+  (testing "nested"
+    (are [x y] (= x y)
+      "[a[b]c]" (#'cuma.core/render-section "@(x)a@(x)b@(/x)c@(/x)"
+                    {:x (fn [data body] (str "[" ((:render data) body data) "]"))
+                     :render render })
+      "[a[b<c>]d]" (#'cuma.core/render-section "@(x)a@(x)b@(y)c@(/y)@(/x)d@(/x)"
+                       {:x (fn [data body] (str "[" ((:render data) body data) "]"))
+                        :y (fn [_ body] (str "<" body ">"))
+                        :render render })))
+
   (testing "error"
     (are [x y] (= x y)
       "@(foo x"             (#'cuma.core/render-section "@(foo x" {})
