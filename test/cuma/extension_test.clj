@@ -32,9 +32,18 @@
 
   (testing "for"
     (are [x y] (= x y)
+      "@(for x)$(.)@(/for)" (render "@(for x)$(.)@(/for)" {})
+      ""         (render "@(for x)$(.)@(/for)" {:x nil})
       "xxx"      (render "@(for arr)x@(/for)" {:arr [1 2 3]})
       "123"      (render "@(for arr)$(.)@(/for)" {:arr [1 2 3]})
-      "123"      (render "@(for arr)$(n)@(/for)" {:arr [{:n 1} {:n 2} {:n 3}]})
+      "123"      (render "@(for arr)$(n)@(/for)" {:arr [{:n 1} {:n 2} {:n 3}]})))
+
+  (testing "map for"
+    (are [x y] (= x y)
+      "foo"      (render "@(for m)$(n)@(/for)" {:m {:n "foo"}})))
+
+  (testing "nested for"
+    (are [x y] (= x y)
       "13142324" (render "@(for arr1)@(for arr2)$(a)$(b)@(/for)@(/for)"
                          {:arr1 [{:a 1} {:a 2}] :arr2 [{:b 3} {:b 4}]})))
 

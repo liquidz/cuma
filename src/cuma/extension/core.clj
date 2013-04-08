@@ -7,12 +7,17 @@
 
 (defn ^{:extension-name 'for}
   for* [data body arg]
-  (if (sequential? arg)
+  (cond
+    (sequential? arg)
     (->> (for [x arg :let [v (if (map? x) x {:. x})]]
-           ((:render data) body (merge v data)))
+           ((:render data) body (merge data v)))
          flatten
          (str/join ""))
-    ""))
+
+    (map? arg)
+    ((:render data) body (merge data arg))
+
+    :else ""))
 
 (defn include
   [data arg]

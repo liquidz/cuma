@@ -10,13 +10,13 @@
   [s data]
   (str/replace
     s #"\$\(\s*(.+?)\s*\)"
-    (fn [[_ x]]
+    (fn [[all x]]
       (let [[a & b :as ls] (str/split x #"\s+")
             f    (get data (keyword (if-not (empty? b) a)) NODATA)
             args (map #(get data (keyword %) NODATA) (if-not (empty? b) b [a]))]
         (if (> (count ls) 1)
-          (if (or (= f NODATA) (some #(= % NODATA) args)) s (str (apply f data args)))
-          (if (= (first args) NODATA) s (str (first args))))))))
+          (if (or (= f NODATA) (some #(= % NODATA) args)) all (str (apply f data args)))
+          (if (= (first args) NODATA) all (str (first args))))))))
 
 
 (defn- parse-section
@@ -25,7 +25,6 @@
     (let [start-str   (str/trim (.substring s (+ 2 from) body-start))
           [f & args]  (str/split start-str #"\s")
           end-str     (str "@(/" f ")")]
-      ;(if-let [body-end (index-of s end-str body-start)]
       (if-let [body-end (get-paired-index s (str "@(" f) end-str from)]
         {:f    f
          :args args
@@ -60,4 +59,3 @@
     (-> s
       (render-section m)
       (render-variable m))))
-

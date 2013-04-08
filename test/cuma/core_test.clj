@@ -63,6 +63,14 @@
 
 
 (deftest render-test
-  (are [x y] (= x y)
-    "foo"     (render "$(x)" {:x "foo"})
-    "foo bar" (render "$(x) @(foo)bar@(/foo)" {:x "foo" :foo (fn [_ b] b)})))
+  (testing "valid"
+    (are [x y] (= x y)
+      "foo"     (render "$(x)" {:x "foo"})
+      "foo bar" (render "$(x) @(foo)bar@(/foo)" {:x "foo" :foo (fn [_ b] b)})))
+
+  (testing "invalid"
+    (are [x y] (= x y)
+      "$(x)"    (render "$(x)" {})
+      "$(f x)"    (render "$(f x)" {})
+      "[$(x)]"  (render "[$(x)]" {})
+      "[$(f x)]"  (render "[$(f x)]" {}))))
