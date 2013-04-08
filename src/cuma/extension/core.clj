@@ -3,21 +3,17 @@
 
 (defn ^{:extension-name 'if}
   if* [data body arg]
-  (if arg ((:render data) body data) ""))
+  (if arg
+    ((:render data) body (merge data (if (map? arg) arg {:. arg}))) ""))
 
 (defn ^{:extension-name 'for}
   for* [data body arg]
-  (cond
-    (sequential? arg)
+  (if (sequential? arg)
     (->> (for [x arg :let [v (if (map? x) x {:. x})]]
            ((:render data) body (merge data v)))
          flatten
          (str/join ""))
-
-    (map? arg)
-    ((:render data) body (merge data arg))
-
-    :else ""))
+    ""))
 
 (defn include
   [data arg]
