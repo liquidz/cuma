@@ -1,13 +1,10 @@
 (ns cuma.core
   (:require
-    [cuma.extension :refer [collect-extension-functions-memo]]
+    [cuma.util.string :refer [index-of]]
+    [cuma.extension   :refer [collect-extension-functions-memo]]
     [clojure.string   :as str]))
 
 (def NODATA `notfound)
-
-(defn- index-of [s target from]
-  (let [i (.indexOf s target from)]
-    (if (not= -1 i) i)))
 
 (defn- render-variable
   [s data]
