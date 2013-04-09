@@ -27,6 +27,7 @@
 (deftest core-functions-test
   (testing "if"
     (are [x y] (= x y)
+      ""    (render "@(if flag)foo@(/if)"  {})
       "foo" (render "@(if flag)foo@(/if)"  {:flag true})
       ""    (render "@(if flag)foo@(/if)"  {:flag false})
       "foo" (render "@(if flag)$(x)@(/if)" {:flag true :x "foo"})))
@@ -38,7 +39,8 @@
 
   (testing "for"
     (are [x y] (= x y)
-      "@(for x)$(.)@(/for)" (render "@(for x)$(.)@(/for)" {})
+      ;"@(for x)$(.)@(/for)" (render "@(for x)$(.)@(/for)" {})
+      ""         (render "@(for x)$(.)@(/for)" {})
       ""         (render "@(for x)$(.)@(/for)" {:x nil})
       "xxx"      (render "@(for arr)x@(/for)" {:arr [1 2 3]})
       "123"      (render "@(for arr)$(.)@(/for)" {:arr [1 2 3]})

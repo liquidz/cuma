@@ -4,19 +4,17 @@
     [cuma.extension   :refer [collect-extension-functions-memo]]
     [clojure.string   :as str]))
 
-(def NODATA `notfound)
-
 (defn- render-variable
   [s data]
   (str/replace
     s #"\$\(\s*(.+?)\s*\)"
     (fn [[all x]]
       (let [[a & b :as ls] (str/split x #"\s+")
-            f    (get data (keyword (if-not (empty? b) a)) NODATA)
-            args (map #(get data (keyword %) NODATA) (if-not (empty? b) b [a]))]
+            f    (get data (keyword (if-not (empty? b) a)))
+            args (map #(get data (keyword %)) (if-not (empty? b) b [a]))]
         (if (> (count ls) 1)
-          (if (or (= f NODATA) (some #(= % NODATA) args)) all (str (apply f data args)))
-          (if (= (first args) NODATA) all (str (first args))))))))
+          (if f (str (apply f data args)) all)
+          (str (first args)))))))
 
 
 (defn- parse-section
@@ -39,9 +37,9 @@
   ([s data from]
    (if-let [sec-start (index-of s "@(" from)]
      (let [{:keys [f args body all]} (parse-section s data sec-start)
-           f    (get data (keyword f) NODATA)
-           args (map #(get data (keyword %) NODATA) args)]
-       (if (every? #(not= % NODATA) (cons f args))
+           f    (get data (keyword f))
+           args (map #(get data (keyword %)) args)]
+       (if f
          (let [res (apply f (concat (list data body) args))]
            (recur
              (str/replace-first s all res)
