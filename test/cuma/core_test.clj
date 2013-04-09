@@ -21,6 +21,11 @@
       "1"           (#'cuma.core/render-variable "$(x)" {:x 1})
       "hello world" (#'cuma.core/render-variable "$(x) $(y)" {:x "hello" :y "world"})))
 
+  (testing "dotted"
+    (are [x y] (= x y)
+      "foo" (#'cuma.core/render-variable "$(x.y)" {:x {:y "foo"}})
+      ""    (#'cuma.core/render-variable "$(x.z)" {:x {:y "foo"}})))
+
   (testing "no function"
     (are [x y] (= x y)
       "$(upper x)" (#'cuma.core/render-variable "$(upper x)" {})
@@ -31,6 +36,8 @@
           plus  (fn [_ & args] (if (every? number? args) (apply + args)))]
       (are [x y] (= x y)
         "FOO" (#'cuma.core/render-variable "$(upper x)" {:upper upper :x "foo"})
+        "FOO" (#'cuma.core/render-variable "$(upper x.y)" {:upper upper :x {:y "foo"}})
+        "FOO" (#'cuma.core/render-variable "$(f.upper x)" {:f {:upper upper} :x "foo"})
         ""    (#'cuma.core/render-variable "$(upper x)" {:upper upper})
         "3"   (#'cuma.core/render-variable "$(+ x y)"   {:+ plus :x 1 :y 2})
         ""    (#'cuma.core/render-variable "$(+ x y)"   {:+ plus})))))
@@ -53,6 +60,13 @@
       "foo" (#'cuma.core/render-section "@(x y)bar@(/x)" {:x (constantly "foo")})
       "foo" (#'cuma.core/render-section "@(x y)bar@(/x)" {:x #(if (nil? %3) "foo" %2)})
       "bar" (#'cuma.core/render-section "@(x y)bar@(/x)" {:x #(if (nil? %3) "foo" %2) :y 1})))
+
+  (testing "dotted"
+    (let [f (fn [data body arg] (str body " " arg))]
+      (are [x y] (= x y)
+        "hello world" (#'cuma.core/render-section "@(f.foo x)hello@(/f.foo)" {:f {:foo f} :x "world"})
+        "hello world" (#'cuma.core/render-section "@(foo x.y)hello@(/foo)" {:foo f :x {:y "world"}})
+        "hello world" (#'cuma.core/render-section "@(f.foo x.y)hello@(/f.foo)" {:f {:foo f} :x {:y "world"}}))))
 
   (testing "nested"
     (are [x y] (= x y)

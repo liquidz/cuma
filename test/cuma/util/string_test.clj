@@ -29,3 +29,19 @@
       nil (get-paired-index "()" , "(" ")" 2)
       nil (get-paired-index "("  , "(" ")")
       nil (get-paired-index "(()", "(" ")"))))
+
+(deftest dotted-get-test
+  (let [data {:a {:b {:c 1} :d 2} :e 3 :. 4}]
+    (testing "valid"
+      (are [x y] (= x (dotted-get data y))
+        1 "a.b.c"
+        2 "a.d"
+        3 "e"
+        4 "."))
+
+    (testing "invalid"
+      (are [x y] (= x (dotted-get data y))
+        nil "x"
+        nil "a.b.c.d"
+        nil nil)
+      (is (= 1 (dotted-get {nil 1} nil))))))

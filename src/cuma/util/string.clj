@@ -30,4 +30,8 @@
          i
          (nth (indexes-of s end (inc i)) (dec n) nil))))))
 
-
+(defn dotted-get [data dotted]
+  (let [arr (if (and (string? dotted) (not= "." dotted))
+              (str/split dotted #"\.")
+              [dotted])]
+    (reduce #(get % (keyword %2)) data arr)))

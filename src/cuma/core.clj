@@ -1,6 +1,6 @@
 (ns cuma.core
   (:require
-    [cuma.util.string :refer [index-of get-paired-index]]
+    [cuma.util.string :refer [index-of get-paired-index dotted-get]]
     [cuma.extension   :refer [collect-extension-functions-memo]]
     [clojure.string   :as str]))
 
@@ -10,8 +10,8 @@
     s #"\$\(\s*(.+?)\s*\)"
     (fn [[all x]]
       (let [[a & b :as ls] (str/split x #"\s+")
-            f    (get data (keyword (if-not (empty? b) a)))
-            args (map #(get data (keyword %)) (if-not (empty? b) b [a]))]
+            f    (dotted-get data (if-not (empty? b) a))
+            args (map #(dotted-get data %) (if (empty? b) [a] b))]
         (if (> (count ls) 1)
           (if f (str (apply f data args)) all)
           (str (first args)))))))
@@ -37,8 +37,8 @@
   ([s data from]
    (if-let [sec-start (index-of s "@(" from)]
      (let [{:keys [f args body all]} (parse-section s data sec-start)
-           f    (get data (keyword f))
-           args (map #(get data (keyword %)) args)]
+           f    (dotted-get data f)
+           args (map #(dotted-get data %) args)]
        (if f
          (let [res (apply f (concat (list data body) args))]
            (recur
