@@ -26,7 +26,7 @@
       (if-let [body-end (get-paired-index s (str "@(" f) end-str from)]
         {:f    f
          :args args
-         :body (str/triml (.substring s (inc body-start) body-end))
+         :body (str/replace (.substring s (inc body-start) body-end) #"^[\r\n]+" "")
          :all  (.substring s from (+ body-end (count end-str)))}
         s))
     s))

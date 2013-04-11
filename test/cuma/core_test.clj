@@ -49,17 +49,20 @@
       "@(x y) test @(/x)" (#'cuma.core/render-section "@(x y) test @(/x)" {})
       "@(x y) test @(/x)" (#'cuma.core/render-section "@(x y) test @(/x)" {:y "foo"})))
 
+
   (testing "simple"
     (are [x y] (= x y)
-      "bar" (#'cuma.core/render-section "@(foo x)bar@(/foo)" {:foo (fn [_ body _] body) :x "baz"})
-      "baz" (#'cuma.core/render-section "@(foo x)bar@(/foo)" {:foo (fn [data _ _] (:x data)) :x "baz"})
-      "baz" (#'cuma.core/render-section "@(foo x)bar@(/foo)" {:foo (fn [_ _ arg] arg) :x "baz"})
-      "baz" (#'cuma.core/render-section "@(foo x y)bar@(/foo)" {:foo (fn [_ _ a1 a2] a1) :x "baz" :y "foo"})
-      "foo" (#'cuma.core/render-section "@(foo x y)bar@(/foo)" {:foo (fn [_ _ a1 a2] a2) :x "baz" :y "foo"})
+      "bar"   (#'cuma.core/render-section "@(foo x)bar@(/foo)" {:foo (fn [_ body _] body) :x "baz"})
+      " bar " (#'cuma.core/render-section "@(foo x) bar @(/foo)" {:foo (fn [_ body _] body) :x "baz"})
 
-      "foo" (#'cuma.core/render-section "@(x y)bar@(/x)" {:x (constantly "foo")})
-      "foo" (#'cuma.core/render-section "@(x y)bar@(/x)" {:x #(if (nil? %3) "foo" %2)})
-      "bar" (#'cuma.core/render-section "@(x y)bar@(/x)" {:x #(if (nil? %3) "foo" %2) :y 1})))
+      "baz"   (#'cuma.core/render-section "@(foo x)bar@(/foo)" {:foo (fn [data _ _] (:x data)) :x "baz"})
+      "baz"   (#'cuma.core/render-section "@(foo x)bar@(/foo)" {:foo (fn [_ _ arg] arg) :x "baz"})
+      "baz"   (#'cuma.core/render-section "@(foo x y)bar@(/foo)" {:foo (fn [_ _ a1 a2] a1) :x "baz" :y "foo"})
+      "foo"   (#'cuma.core/render-section "@(foo x y)bar@(/foo)" {:foo (fn [_ _ a1 a2] a2) :x "baz" :y "foo"})
+
+      "foo"   (#'cuma.core/render-section "@(x y)bar@(/x)" {:x (constantly "foo")})
+      "foo"   (#'cuma.core/render-section "@(x y)bar@(/x)" {:x #(if (nil? %3) "foo" %2)})
+      "bar"   (#'cuma.core/render-section "@(x y)bar@(/x)" {:x #(if (nil? %3) "foo" %2) :y 1})))
 
   (testing "dotted"
     (let [f (fn [data body arg] (str body " " arg))]

@@ -1,11 +1,19 @@
 (ns cuma.extension.core
   (:require [clojure.string :as str]))
 
+; =if
 (defn ^{:extension-name 'if}
   if* [data body arg]
   (if arg
     ((:render data) body (merge data (if (map? arg) arg {:. arg}))) ""))
 
+; =if-not
+(defn ^{:extension-name 'if-not}
+  if-not* [data body arg]
+  (if-not arg
+    ((:render data) body (merge data (if (map? arg) arg {:. arg}))) ""))
+
+; =for
 (defn ^{:extension-name 'for}
   for* [data body arg]
   (if (sequential? arg)
@@ -15,10 +23,12 @@
          (str/join ""))
     ""))
 
+; =include
 (defn include
   [data arg]
   ((:render data) arg data))
 
+; =escape
 (defn escape
   "Escape string."
   [_ arg]
