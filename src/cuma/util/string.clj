@@ -2,10 +2,12 @@
   (:require
     [clojure.string :as str]))
 
+; =index-of
 (defn index-of [s target from]
   (let [i (.indexOf s target from)]
     (if (not= -1 i) i)))
 
+; =indexes-of
 (defn indexes-of
   ([s target] (indexes-of s target 0))
   ([s target from]
@@ -20,6 +22,7 @@
           (map first)
           (take-while (comp not nil?))))))
 
+; =get-paired-index
 (defn get-paired-index
   ([s start end] (get-paired-index s start end 0))
   ([s start end from]
@@ -30,6 +33,7 @@
          i
          (nth (indexes-of s end (inc i)) (dec n) nil))))))
 
+; =dotted-get
 (defn dotted-get [data dotted]
   (let [arr (if (and (string? dotted) (not= "." dotted))
               (str/split dotted #"\.")

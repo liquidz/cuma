@@ -2,8 +2,9 @@
   (:require
     [cuma.util.string :refer [index-of get-paired-index dotted-get]]
     [cuma.extension   :refer [collect-extension-functions-memo]]
-    [clojure.string   :as str]))
+    [clojure.string   :as    str]))
 
+; =render-variable
 (defn- render-variable
   [s data]
   (str/replace
@@ -16,7 +17,7 @@
           (if f (str (apply f data args)) all)
           (str (first args)))))))
 
-
+; =parse-section
 (defn- parse-section
   [s data from]
   (if-let [body-start (index-of s ")" from)]
@@ -31,7 +32,7 @@
         s))
     s))
 
-
+; =render-section
 (defn- render-section
   ([s data] (render-section s data 0))
   ([s data from]
@@ -48,7 +49,7 @@
          s))
      s)))
 
-
+; =render
 (defn render
   [s data]
   (let [m (merge {:render render}
