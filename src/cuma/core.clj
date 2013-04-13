@@ -41,7 +41,7 @@
            f    (dotted-get data f)
            args (map #(dotted-get data %) args)]
        (if f
-         (let [res (apply f (concat (list data body) args))]
+         (let [res (str (apply f (concat (list data body) args)))]
            (recur
              (str/replace-first s all res)
              data
@@ -52,6 +52,7 @@
 ; =render
 (defn render
   [s data]
+  {:pre [(string? s) (map? data)]}
   (let [m (merge {:render render}
                  (collect-extension-functions-memo)
                  data)]

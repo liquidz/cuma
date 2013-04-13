@@ -15,7 +15,6 @@
      [(min (count s) from)]
      (->> (iterate
             #(if % (if-let [i (index-of s target (second %))]
-
                      [i (inc i)]))
             [-1 from])
           rest
@@ -26,12 +25,13 @@
 (defn get-paired-index
   ([s start end] (get-paired-index s start end 0))
   ([s start end from]
-   (if-let [i (index-of s end from)]
-     (let [x (.substring s (inc from) i)
-           n (count (take-while (comp not nil?) (indexes-of x start)))]
-       (if (zero? n)
-         i
-         (nth (indexes-of s end (inc i)) (dec n) nil))))))
+   (let [t (+ (count start) from)
+         i (index-of s end from)]
+     (if (and i (<= t i))
+       (let [n (count (indexes-of (.substring s t i) start))]
+         (if (zero? n)
+           i
+           (nth (indexes-of s end (inc i)) (dec n) nil)))))))
 
 ; =dotted-get
 (defn dotted-get [data dotted]

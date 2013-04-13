@@ -26,14 +26,16 @@
 ; =include
 (defn include
   [data arg]
-  ((:render data) arg data))
+  (if (string? arg)
+    ((:render data) arg data)))
 
 ; =escape
 (defn escape
   "Escape string."
   [_ arg]
-  (-> arg (str/replace #"&"  "&amp;")
-          (str/replace #"\"" "&quot;")
-          (str/replace #"<"  "&lt;")
-          (str/replace #">"  "&gt;")))
+  (if (string? arg)
+    (-> arg (str/replace #"&"  "&amp;")
+            (str/replace #"\"" "&quot;")
+            (str/replace #"<"  "&lt;")
+            (str/replace #">"  "&gt;"))))
 
