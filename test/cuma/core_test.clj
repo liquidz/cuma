@@ -77,20 +77,20 @@
     (render "@(f)foo@(/f)" {})       => "@(f)foo@(/f)"
     (render "@(f)foo@(/f)" {:f nil}) => "@(f)foo@(/f)")
 
-  (fact "セクションに渡す値がnilの場合でも動作すること"
+  (fact "Section should work fine when nil variable passed."
     (let [{:keys [body arg1 arg2]} section]
       (render "@(f x)foo@(/f)"   {:f body})        => "foo"
       (render "@(f x)foo@(/f)"   {:f arg1})        => ""
       (render "@(f x y)foo@(/f)" {:f arg2 :x "x"}) => ""
       (render "@(f x y)foo@(/f)" {:f arg2 :x "x"}) => ""))
 
-  (fact "セクションでドット区切りの変数指定ができること"
+  (fact "Dotted name section should be replaced."
     (let [{:keys [body arg1]} section]
       (render "@(f.g)foo@(/f.g)"     {:f {:g body}})               => "foo"
       (render "@(f a.b)foo@(/f)"     {:f arg1 :a {:b "bar"}})      => "bar"
       (render "@(f.g a.b)foo@(/f.g)" {:f {:g arg1} :a {:b "bar"}}) => "bar"))
 
-  (fact "extension.coreの関数が使えること"
+  (fact "Functions in extension.core should be accessible."
     (render "$(escape x)"      {:x "<h1>"}) => "&lt;h1&gt;"
     (render "@(if f)foo@(/if)" {:f true})   => "foo"
     (render "@(if f)foo@(/if)" {:f false})  => ""))

@@ -7,7 +7,7 @@
 
 ;; collect-extension-functions
 (facts "collect-extension-functions function should work fine."
-  (fact "extension.coreが読み込めること"
+  (fact "Extension.core should be loaded."
     (let [m (#'cuma.extension/collect-extension-functions)]
       (:escape m) => truthy
       (:if m)     => truthy
@@ -15,7 +15,7 @@
       (:dummy m)  => falsey
       (:collect-extension-functions-memo m) => falsey))
 
-  (fact "extensionのnamespace指定が変えられること"
+  (fact "Extension namespace should be changeable."
     (binding [*extension-ns-regexp* #"^cuma\."]
       (let [m (#'cuma.extension/collect-extension-functions)]
         (:escape m) => truthy
@@ -26,13 +26,13 @@
 
 ;; if
 (facts "if extension should work fine."
-  (fact "条件分岐できること"
+  (fact "`if` should work."
     (render "@(if flag)foo@(/if)"  {})                    => ""
     (render "@(if flag)foo@(/if)"  {:flag true})          => "foo"
     (render "@(if flag)foo@(/if)"  {:flag false})         => ""
     (render "@(if flag)$(x)@(/if)" {:flag true :x "foo"}) => "foo")
 
-  (fact "評価した値が暗黙知にバインドされていること"
+  (fact "Evaluated value should bind implicit variable."
     (render "@(if x)$(.)@(/if)" {:x "foo"})      => "foo"
     (render "@(if m)$(n)@(/if)" {:m {:n "foo"}}) => "foo"))
 
@@ -45,17 +45,18 @@
 
 ;; for
 (facts "for extension should work fine."
-  (fact "ループできること"
+  (fact "`for` should work."
     (render "@(for arr)x@(/for)"    {:arr [1 2 3]})                => "xxx"
     (render "@(for arr)$(.)@(/for)" {:arr [1 2 3]})                => "123"
     (render "@(for arr)$(n)@(/for)" {:arr [{:n 1} {:n 2} {:n 3}]}) => "123")
 
-  (fact "ネストしてループできること"
+  (fact "Nested `for` should work."
     (render "@(for arr1)@(for arr2)$(a)$(b)@(/for)@(/for)"
             {:arr1 [{:a 1} {:a 2}] :arr2 [{:b 3} {:b 4}]})
     => "13142324")
 
-  (fact "シーケンス以外はループできないこと"
+  ;(fact "シーケンス以外はループできないこと"
+  (fact "Non-sequential value should not be looped."
     (render "@(for x)$(.)@(/for)" {})       => ""
     (render "@(for x)$(.)@(/for)" {:x nil}) => ""))
 
