@@ -90,6 +90,13 @@
       (render "@(f a.b)foo@(/f)"     {:f arg1 :a {:b "bar"}})      => "bar"
       (render "@(f.g a.b)foo@(/f.g)" {:f {:g arg1} :a {:b "bar"}}) => "bar"))
 
+  (fact "Complex pattern should be rendered correctly."
+    (render "$(a)-$(b)" {:a "$(b)" :b "c"}) => "$(b)-c"
+    (render "$(a) @(if b)$(.)@(/if)" {:a 1 :b 2}) => "1 2"
+    (render "@(if b)$(.)@(/if) $(a)" {:a 1 :b 2}) => "2 1"
+    ;(render "@(if a)$(.)-$(b)@(/if)" {:a "$(b)" :b "c"}) => "$(b)-c"
+    )
+
   (fact "Functions in extension.core should be accessible."
     (render "$(escape x)"      {:x "<h1>"}) => "&lt;h1&gt;"
     (render "@(if f)foo@(/if)" {:f true})   => "foo"
