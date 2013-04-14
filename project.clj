@@ -1,5 +1,5 @@
 (defproject cuma "0.0.1"
-  :description "S-expression based micro template in clojure"
+  :description "Extensible micro template engine for Clojure"
   :url         "https://github.com/liquidz/cuma"
 
   :license {:name "Eclipse Public License"
