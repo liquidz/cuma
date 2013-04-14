@@ -8,7 +8,7 @@ S-expression based micro template in clojure.
 
 Add following dependency to your `profject.clj`.
 ```clojure
-[cuma "0.0.1-SNAPSHOT"]
+[cuma "0.0.1"]
 ```
 
 ## Usage
