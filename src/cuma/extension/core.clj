@@ -5,13 +5,17 @@
 (defn ^{:extension-name 'if}
   if* [data body arg]
   (if arg
-    ((:render data) body (merge data (if (map? arg) arg {:. arg}))) ""))
+    (if (map? arg)
+      ((:render data) body (merge data arg))
+      ((:render data) body (assoc data :. arg)))))
 
 ; =if-not
 (defn ^{:extension-name 'if-not}
   if-not* [data body arg]
   (if-not arg
-    ((:render data) body (merge data (if (map? arg) arg {:. arg}))) ""))
+    (if (map? arg)
+      ((:render data) body (merge data arg))
+      ((:render data) body (assoc data :. arg)))))
 
 ; =for
 (defn ^{:extension-name 'for}
