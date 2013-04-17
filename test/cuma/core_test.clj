@@ -93,12 +93,16 @@
   (fact "Complex pattern should be rendered correctly."
     (render "$(a)-$(b)" {:a "$(b)" :b "c"}) => "$(b)-c"
     (render "$(a) @(if b)$(.)@(/if)" {:a 1 :b 2}) => "1 2"
-    (render "@(if b)$(.)@(/if) $(a)" {:a 1 :b 2}) => "2 1"
-    ;(render "@(if a)$(.)-$(b)@(/if)" {:a "$(b)" :b "c"}) => "$(b)-c"
-    )
+    (render "@(if b)$(.)@(/if) $(a)" {:a 1 :b 2}) => "2 1")
+
+  (fact "Escaping and unescaping should work correctly."
+    (render "$(x)" {:x "<h1>"}) => "&lt;h1&gt;"
+    (render "$(raw x)" {:x "<h1>"}) => "<h1>"
+    (render "@(if x)$(.)@(/if)" {:x "<h1>"}) => "&lt;h1&gt;"
+    (render "@(if x)$(raw .)@(/if)" {:x "<h1>"}) => "<h1>"
+    (render "$(f x)" {:x "h1" :f (fn [_ x] (str "<" x ">"))}) => "&lt;h1&gt;")
 
   (fact "Functions in extension.core should be accessible."
-    (render "$(escape x)"      {:x "<h1>"}) => "&lt;h1&gt;"
     (render "@(if f)foo@(/if)" {:f true})   => "foo"
     (render "@(if f)foo@(/if)" {:f false})  => ""))
 

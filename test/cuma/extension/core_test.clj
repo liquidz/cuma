@@ -50,7 +50,19 @@
   (render "$(x)$(include base)"   {:base "@(for arr)$(.)@(/for)" :x "12" :arr [3 4]})
   => "1234")
 
-;; escape
-(fact "escape extension should work fine."
-  (render "$(escape x)" {}) => ""
-  (render "$(escape x)" {:x "<h1>"}) => "&lt;h1&gt;")
+;; raw
+(fact "raw extension should work fine."
+  (render "$(raw x)" {}) => ""
+  (render "$(raw x)" {:x "<h1>"}) => "<h1>")
+
+;; ->
+(fact "-> extension should work fine."
+  (let [f (fn [_ x] (str "foo " x))
+        g (fn [_ x] (str "bar " x))]
+    (render "$(-> x)" {:x "baz"})         => "baz"
+    (render "$(-> x)" {:x "<h1>"})        => "&lt;h1&gt;"
+    (render "$(-> x raw)" {:x "<h1>"})    => "<h1>"
+    (render "$(-> x f)" {:f f :x "baz"})  => "foo baz"
+    (render "$(-> x f)" {:f f :x "<h1>"}) => "foo &lt;h1&gt;"
+    (render "$(-> x f g)" {:f f :g g :x "baz"}) => "bar foo baz"
+    (render "$(-> x f raw)" {:f f :x "<h1>"})   => "foo <h1>"))

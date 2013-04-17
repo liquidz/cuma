@@ -29,13 +29,13 @@
   (if (string? arg)
     ((:render data) arg data)))
 
-; =escape
-(defn escape
-  "Escape string."
+; =raw
+(defn raw
   [_ arg]
-  (if (string? arg)
-    (-> arg (str/replace #"&"  "&amp;")
-            (str/replace #"\"" "&quot;")
-            (str/replace #"<"  "&lt;")
-            (str/replace #">"  "&gt;"))))
+  {:raw? true :body arg})
 
+; =->
+(defn ^{:extension-name '->}
+  arrow*
+  [data arg & fns]
+  (reduce (fn [res f] (f data res)) arg fns))

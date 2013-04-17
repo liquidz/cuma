@@ -25,8 +25,15 @@ require `[cure.core :refer [render]]`
 Replace escaped variable.
 
 ```clojure
-(render "$(escape x)" {:x "<h1>"})
+(render "$(x)" {:x "<h1>"})
 ;=> &lt;h1&gt;
+```
+
+Replace unescaped variable.
+
+```clojure
+(render "$(raw x)" {:x "<h1>"})
+;=> <h1>
 ```
 
 Include another template.
@@ -42,6 +49,15 @@ Function detail is explained at following.
 ```clojure
 (render "$(upper x)" {:upper (fn [data s] (.toUpperCase s)) :x "hello")
 ;=> HELLO
+```
+
+Chain custom functions.
+
+```clojure
+(let [f (fn [_ arg] (str "foo " arg))
+      g (fn [_ arg] (str "bar " arg))]
+ (render "$(-> x g f)" {:f f :g g :x "baz"}))
+;=> "foo bar baz"
 ```
 
 ### Replace Section
@@ -119,7 +135,7 @@ and cuma allows you to make custon function as extension.
 
 Cuma searches `cuma.extension.*` namespaces, and load all public functions ad extension.
 
-`escape`, `include`, `if`, `for` are also extension.
+`raw`, `->`, `include`, `if`, `for` are also extension.
 https://github.com/liquidz/cuma/blob/master/src/cuma/extension/core.clj
 
 ### Variable Extension

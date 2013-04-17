@@ -4,6 +4,16 @@
     [cuma.extension   :refer [collect-extension-functions-memo]]
     [clojure.string   :as    str]))
 
+; =escape
+(defn escape
+  "Escape string."
+  [s]
+  (if (string? s)
+    (-> s (str/replace #"&"  "&amp;")
+            (str/replace #"\"" "&quot;")
+            (str/replace #"<"  "&lt;")
+            (str/replace #">"  "&gt;"))))
+
 ; =render-variable
 (defn- render-variable
   [s data]
@@ -12,10 +22,15 @@
     (fn [[all x]]
       (let [[a & b :as ls] (str/split x #"\s+")
             f    (dotted-get data (if-not (empty? b) a))
-            args (map #(dotted-get data %) (if (empty? b) [a] b))]
-        (if (> (count ls) 1)
-          (if f (str (apply f data args)) all)
-          (str (first args)))))))
+            args (map #(dotted-get data %) (if (empty? b) [a] b))
+            res (if (> (count ls) 1)
+                  (if f (apply f data args) all)
+                  (first args))]
+        (if (and (map? res) (contains? res :body))
+          (if (:raw? res)
+            (-> res :body str)
+            (-> res :body str escape))
+          (-> res str escape))))))
 
 ; =parse-section
 (defn- parse-section
@@ -52,10 +67,12 @@
 ; =render
 (defn render
   [s data]
-  {:pre [(string? s) (map? data)]}
+  {:pre  [(string? s) (map? data)] :post [(string? %)]}
   (let [m (merge {:render render}
                  (collect-extension-functions-memo)
                  data)]
     (-> s
       (render-section m)
       (render-variable m))))
+
+
