@@ -43,3 +43,7 @@
   arrow*
   [data arg & fns]
   (reduce (fn [res f] (f data res)) arg fns))
+
+; =comment
+(defn ^{:extension-name 'comment}
+  comment* [& _] "")

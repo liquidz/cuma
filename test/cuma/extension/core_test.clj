@@ -66,3 +66,10 @@
     (render "$(-> x f)" {:f f :x "<h1>"}) => "foo &lt;h1&gt;"
     (render "$(-> x f g)" {:f f :g g :x "baz"}) => "bar foo baz"
     (render "$(-> x f raw)" {:f f :x "<h1>"})   => "foo <h1>"))
+
+;; comment
+(fact "comment extension should work fine."
+  (render "@(comment)foo@(end)" {})                      => ""
+  (render "@(comment)$(x)@(end)" {})                     => ""
+  (render "@(comment)$(x)@(end)" {:x "foo"})             => ""
+  (render "@(comment)@(if x)foo@(end)@(end)" {:x "foo"}) => "")
