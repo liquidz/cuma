@@ -8,7 +8,7 @@ Extensible micro template engine for Clojure.
 
 Add following dependency to your `profject.clj`.
 ```clojure
-[cuma "0.0.2"]
+[cuma "0.0.3"]
 ```
 
 ## Usage
@@ -64,23 +64,23 @@ Chain custom functions.
 #### if section
 
 ```clojure
-(render "@(if flg) foo @(/if)" {:flg true})
+(render "@(if flg) foo @(end)" {:flg true})
 ;=> foo
-(render "@(if flg) foo @(/if)" {:flg false})
+(render "@(if flg) foo @(end)" {:flg false})
 ;=>
 ```
 
 Implicit variable `$(.)` is binded in `if` section.
 
 ```clojure
-(render "@(if x) $(.) @(/if)" {:x "hello"})
+(render "@(if x) $(.) @(end)" {:x "hello"})
 ;=> hello
 ```
 
 Map data is expanded to variable in `if` section.
 
 ```clojure
-(render "@(if m) $(n) @(/if)" {:m {:n "foo"}})
+(render "@(if m) $(n) @(end)" {:m {:n "foo"}})
 ;=> foo
 ```
 
@@ -89,27 +89,27 @@ Map data is expanded to variable in `if` section.
 Implicit variable `$(.)` is binded in `for` section.
 
 ```clojure
-(render "@(for arr) $(.) @(/for)" {:arr [1 2 3]})
+(render "@(for arr) $(.) @(end)" {:arr [1 2 3]})
 ;=> 1 2 3
 ```
 
 Map data is expanded to variable in `for` section.
 
 ```clojure
-(render "@(for arr) $(n) @(/for)" {:arr [{:n 1} {:n 2} {:n 3}]})
+(render "@(for arr) $(n) @(end)" {:arr [{:n 1} {:n 2} {:n 3}]})
 ;=> 1 2 3
 
-(render "@(for arr1) @(for arr2) $(a)$(b) @(/for) @(/for)"
+(render "@(for arr1) @(for arr2) $(a)$(b) @(end) @(end)"
         {:arr1 [{:a 1} {:a 2}] :arr2 [{:b 3} {:b 4}]})
 ;=> 13 14 23 24
 ```
 
 #### custom section
 ```clojure
-(render "@(foo) world @(/foo)" {:foo (fn [data body] (str "hello " body))})
+(render "@(foo) world @(end)" {:foo (fn [data body] (str "hello " body))})
 ;=> hello world
 
-(render "@(foo x) world @(/foo)"
+(render "@(foo x) world @(end)"
         {:foo (fn [data body arg] (str arg " " body)) :x "hello"})
 ;=> hello world
 ```
@@ -157,7 +157,7 @@ https://github.com/liquidz/cuma/blob/master/src/cuma/extension/core.clj
 ### Section Extension
 
 ```clojure
-(render "@(f x y z) world @(/f)" {:x 1 :y 2 :z 3 :foo "bar"})
+(render "@(f x y z) world @(end)" {:x 1 :y 2 :z 3 :foo "bar"})
 ```
 
 ```clojure
