@@ -7,37 +7,37 @@
 ;; if
 (facts "if extension should work fine."
   (fact "`if` should work."
-    (render "@(if flag)foo@(/if)"  {})                    => ""
-    (render "@(if flag)foo@(/if)"  {:flag true})          => "foo"
-    (render "@(if flag)foo@(/if)"  {:flag false})         => ""
-    (render "@(if flag)$(x)@(/if)" {:flag true :x "foo"}) => "foo")
+    (render "@(if flag)foo@(end)"  {})                    => ""
+    (render "@(if flag)foo@(end)"  {:flag true})          => "foo"
+    (render "@(if flag)foo@(end)"  {:flag false})         => ""
+    (render "@(if flag)$(x)@(end)" {:flag true :x "foo"}) => "foo")
 
   (fact "Evaluated value should bind implicit variable."
-    (render "@(if x)$(.)@(/if)" {:x "foo"})      => "foo"
-    (render "@(if m)$(n)@(/if)" {:m {:n "foo"}}) => "foo"))
+    (render "@(if x)$(.)@(end)" {:x "foo"})      => "foo"
+    (render "@(if m)$(n)@(end)" {:m {:n "foo"}}) => "foo"))
 
 ;; if-not
 (fact "if-not extension should work fine."
-  (render "@(if-not flag)foo@(/if-not)"  {})                     => "foo"
-  (render "@(if-not flag)foo@(/if-not)"  {:flag true})           => ""
-  (render "@(if-not flag)foo@(/if-not)"  {:flag false})          => "foo"
-  (render "@(if-not flag)$(x)@(/if-not)" {:flag false :x "foo"}) => "foo")
+  (render "@(if-not flag)foo@(end)"  {})                     => "foo"
+  (render "@(if-not flag)foo@(end)"  {:flag true})           => ""
+  (render "@(if-not flag)foo@(end)"  {:flag false})          => "foo"
+  (render "@(if-not flag)$(x)@(end)" {:flag false :x "foo"}) => "foo")
 
 ;; for
 (facts "for extension should work fine."
   (fact "`for` should work."
-    (render "@(for arr)x@(/for)"    {:arr [1 2 3]})                => "xxx"
-    (render "@(for arr)$(.)@(/for)" {:arr [1 2 3]})                => "123"
-    (render "@(for arr)$(n)@(/for)" {:arr [{:n 1} {:n 2} {:n 3}]}) => "123")
+    (render "@(for arr)x@(end)"    {:arr [1 2 3]})                => "xxx"
+    (render "@(for arr)$(.)@(end)" {:arr [1 2 3]})                => "123"
+    (render "@(for arr)$(n)@(end)" {:arr [{:n 1} {:n 2} {:n 3}]}) => "123")
 
   (fact "Nested `for` should work."
-    (render "@(for arr1)@(for arr2)$(a)$(b)@(/for)@(/for)"
+    (render "@(for arr1)@(for arr2)$(a)$(b)@(end)@(end)"
             {:arr1 [{:a 1} {:a 2}] :arr2 [{:b 3} {:b 4}]})
     => "13142324")
 
   (fact "Non-sequential value should not be looped."
-    (render "@(for x)$(.)@(/for)" {})       => ""
-    (render "@(for x)$(.)@(/for)" {:x nil}) => ""))
+    (render "@(for x)$(.)@(end)" {})       => ""
+    (render "@(for x)$(.)@(end)" {:x nil}) => ""))
 
 
 ;; include
@@ -47,7 +47,7 @@
   (render "hello $(include base)" {:base "$(x)" :x "world"})
   => "hello world"
 
-  (render "$(x)$(include base)"   {:base "@(for arr)$(.)@(/for)" :x "12" :arr [3 4]})
+  (render "$(x)$(include base)"   {:base "@(for arr)$(.)@(end)" :x "12" :arr [3 4]})
   => "1234")
 
 ;; raw

@@ -38,12 +38,13 @@
   (if-let [body-start (index-of s ")" from)]
     (let [start-str   (str/trim (.substring s (+ 2 from) body-start))
           [f & args]  (str/split start-str #"\s")
-          end-str     (str "@(/" f ")")]
-      (if-let [body-end (get-paired-index s (str "@(" f) end-str from)]
+          end-str     "@(end)"
+          end-len     6]
+      (if-let [body-end (get-paired-index s "@(" end-str from)]
         {:f    f
          :args args
          :body (str/replace (.substring s (inc body-start) body-end) #"^[\r\n]+" "")
-         :all  (.substring s from (+ body-end (count end-str)))}
+         :all  (.substring s from (+ body-end end-len))}
         s))
     s))
 
@@ -74,5 +75,3 @@
     (-> s
       (render-section m)
       (render-variable m))))
-
-

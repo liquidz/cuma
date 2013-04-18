@@ -60,49 +60,49 @@
 
   (fact "Section should be replaced."
     (let [{:keys [body data arg1 arg2]} section]
-      (render "@(f)foo@(/f)"   {:f body})               => "foo"
-      (render "@(f)@(/f)"      {:f body})               => ""
-      (render "@(f x)_@(/f)"   {:f data :x "x"})        => "x"
-      (render "@(f x y)_@(/f)" {:f arg1 :x "x" :y "y"}) => "x"
-      (render "@(f x y)_@(/f)" {:f arg2 :x "x" :y "y"}) => "y"))
+      (render "@(f)foo@(end)"   {:f body})               => "foo"
+      (render "@(f)@(end)"      {:f body})               => ""
+      (render "@(f x)_@(end)"   {:f data :x "x"})        => "x"
+      (render "@(f x y)_@(end)" {:f arg1 :x "x" :y "y"}) => "x"
+      (render "@(f x y)_@(end)" {:f arg2 :x "x" :y "y"}) => "y"))
 
   (fact "Nested section should be replaced."
     (let [{f :quot, g :dquot} section]
-      (render "@(f)x @(f)y@(/f)@(/f)"       {:f f})             => "'x 'y''"
-      (render "@(f)$(x) @(f)$(x)@(/f)@(/f)" {:f f :x "a"})      => "'a 'a''"
-      (render "@(f)x @(g)y@(/g)@(/f)"       {:f f :g g})        => "'x \"y\"'"
-      (render "@(f)$(x) @(g)$(x)@(/g)@(/f)" {:f f :g g :x "a"}) => "'a \"a\"'"))
+      (render "@(f)x @(f)y@(end)@(end)"       {:f f})             => "'x 'y''"
+      (render "@(f)$(x) @(f)$(x)@(end)@(end)" {:f f :x "a"})      => "'a 'a''"
+      (render "@(f)x @(g)y@(end)@(end)"       {:f f :g g})        => "'x \"y\"'"
+      (render "@(f)$(x) @(g)$(x)@(end)@(end)" {:f f :g g :x "a"}) => "'a \"a\"'"))
 
   (fact "Nil section should not be replaced."
-    (render "@(f)foo@(/f)" {})       => "@(f)foo@(/f)"
-    (render "@(f)foo@(/f)" {:f nil}) => "@(f)foo@(/f)")
+    (render "@(f)foo@(end)" {})       => "@(f)foo@(end)"
+    (render "@(f)foo@(end)" {:f nil}) => "@(f)foo@(end)")
 
   (fact "Section should work fine when nil variable passed."
     (let [{:keys [body arg1 arg2]} section]
-      (render "@(f x)foo@(/f)"   {:f body})        => "foo"
-      (render "@(f x)foo@(/f)"   {:f arg1})        => ""
-      (render "@(f x y)foo@(/f)" {:f arg2 :x "x"}) => ""
-      (render "@(f x y)foo@(/f)" {:f arg2 :x "x"}) => ""))
+      (render "@(f x)foo@(end)"   {:f body})        => "foo"
+      (render "@(f x)foo@(end)"   {:f arg1})        => ""
+      (render "@(f x y)foo@(end)" {:f arg2 :x "x"}) => ""
+      (render "@(f x y)foo@(end)" {:f arg2 :x "x"}) => ""))
 
   (fact "Dotted name section should be replaced."
     (let [{:keys [body arg1]} section]
-      (render "@(f.g)foo@(/f.g)"     {:f {:g body}})               => "foo"
-      (render "@(f a.b)foo@(/f)"     {:f arg1 :a {:b "bar"}})      => "bar"
-      (render "@(f.g a.b)foo@(/f.g)" {:f {:g arg1} :a {:b "bar"}}) => "bar"))
+      (render "@(f.g)foo@(end)"     {:f {:g body}})               => "foo"
+      (render "@(f a.b)foo@(end)"     {:f arg1 :a {:b "bar"}})    => "bar"
+      (render "@(f.g a.b)foo@(end)" {:f {:g arg1} :a {:b "bar"}}) => "bar"))
 
   (fact "Complex pattern should be rendered correctly."
-    (render "$(a)-$(b)" {:a "$(b)" :b "c"}) => "$(b)-c"
-    (render "$(a) @(if b)$(.)@(/if)" {:a 1 :b 2}) => "1 2"
-    (render "@(if b)$(.)@(/if) $(a)" {:a 1 :b 2}) => "2 1")
+    (render "$(a)-$(b)" {:a "$(b)" :b "c"})       => "$(b)-c"
+    (render "$(a) @(if b)$(.)@(end)" {:a 1 :b 2}) => "1 2"
+    (render "@(if b)$(.)@(end) $(a)" {:a 1 :b 2}) => "2 1")
 
   (fact "Escaping and unescaping should work correctly."
-    (render "$(x)" {:x "<h1>"}) => "&lt;h1&gt;"
-    (render "$(raw x)" {:x "<h1>"}) => "<h1>"
-    (render "@(if x)$(.)@(/if)" {:x "<h1>"}) => "&lt;h1&gt;"
-    (render "@(if x)$(raw .)@(/if)" {:x "<h1>"}) => "<h1>"
+    (render "$(x)" {:x "<h1>"})                               => "&lt;h1&gt;"
+    (render "$(raw x)" {:x "<h1>"})                           => "<h1>"
+    (render "@(if x)$(.)@(end)" {:x "<h1>"})                  => "&lt;h1&gt;"
+    (render "@(if x)$(raw .)@(end)" {:x "<h1>"})              => "<h1>"
     (render "$(f x)" {:x "h1" :f (fn [_ x] (str "<" x ">"))}) => "&lt;h1&gt;")
 
   (fact "Functions in extension.core should be accessible."
-    (render "@(if f)foo@(/if)" {:f true})   => "foo"
-    (render "@(if f)foo@(/if)" {:f false})  => ""))
+    (render "@(if f)foo@(end)" {:f true})   => "foo"
+    (render "@(if f)foo@(end)" {:f false})  => ""))
 
