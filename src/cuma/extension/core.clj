@@ -50,5 +50,10 @@
 
 ; =let
 (defn ^{:extension-name 'let}
-  let* [data body & args]
-  ((:render data) body (merge data (apply hash-map args))))
+  let* [{render :render :as data} body & args]
+  (->> args
+       (partition 2)
+       (map (fn [[k v]] [k (if (string? v) (render v data) v)]))
+       (into {})
+       (merge data)
+       (render body)))

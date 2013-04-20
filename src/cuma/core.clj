@@ -1,6 +1,6 @@
 (ns cuma.core
   (:require
-    [cuma.util.string :refer [index-of get-paired-string-index dotted-get]]
+    [cuma.util.string :refer [index-of get-paired-string-index get-paired-char-index dotted-get]]
     [cuma.extension   :refer [collect-extension-functions-memo]]
     [clojure.string   :as    str]))
 
@@ -38,8 +38,8 @@
 ; =parse-section
 (defn- parse-section
   [s data from]
-  ;(if-let [body-start (index-of s ")" from)]
-  (if-let [body-start (get-paired-string-index s  "(" ")" (+ 2 from))]
+  ;(if-let [body-start (get-paired-string-index s  "(" ")" (+ 2 from))]
+  (if-let [body-start (get-paired-char-index s  \( \) (inc from))]
     (let [start-str   (str/trim (.substring s (inc from) (inc body-start)))
           [f & args]  (read-string* start-str)
           end-str     "@(end)"
@@ -78,21 +78,3 @@
     (-> s
       (render-section m 0)
       (render-variable m))))
-
-;(defn -main []
-;  (println
-;    (let [s "@(let :x \"@(let :x 1)$(x)@(end)\")$(x)@(end)"
-;          from (index-of s "@(" 0)
-;          ]
-;
-;      (println (str "s = [" s "]"))
-;      (println (str "from = " from))
-;
-;      (when-let [body-start (get-paired-index s  "(" ")" (+ 2 from))]
-;        (let [start-str   (str/trim (.substring s (inc from) (inc body-start)))]
-;          (println (str "[" start-str "]"))
-;          )
-;        )
-;      )
-;    )
-;  )

@@ -33,6 +33,20 @@
            i
            (nth (indexes-of s end (inc i)) (dec n) nil)))))))
 
+; =get-paired-char-index
+(defn get-paired-char-index
+  [s start end from]
+   (let [len (count s)]
+     (loop [i from, level 0, start? false]
+       (cond
+         (and start? (zero? level)) (dec i)
+         (>= i len) nil
+         :else (let [c (.charAt s i), i* (inc i)]
+                 (cond
+                   (= start c) (recur i* (inc level) true)
+                   (= end c)   (recur i* (dec level) start?)
+                   :else       (recur i* level start?)))))))
+
 ; =dotted-get
 (defn dotted-get
   [data dotted]

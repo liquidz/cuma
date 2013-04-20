@@ -52,6 +52,26 @@
     (get-paired-string-index "<%"    , "<%" "%>")   => nil
     (get-paired-string-index "<%<%%>", "<%" "%>")   => nil))
 
+;; get-paired-char-index
+(facts "get-paired-char-index function should work fine."
+  (fact "Paired character index should be found."
+    (get-paired-char-index "()" \( \) 0) => 1
+    (get-paired-char-index "(a)" \( \) 0) => 2
+    (get-paired-char-index "(a (b))" \( \) 0) => 6
+    (get-paired-char-index "(a (b))" \( \) 3) => 5
+    (get-paired-char-index "((a) b)" \( \) 0) => 6
+    (get-paired-char-index "(())" \( \) 0) => 3
+    (get-paired-char-index "(()())" \( \) 0) => 5
+    (get-paired-char-index "(()())" \( \) 1) => 2)
+
+  (fact "If paired character is not exists, nil should be returned."
+    (get-paired-char-index ""   , \( \) 0)   => nil
+    (get-paired-char-index "()" , \( \) 1) => nil
+    (get-paired-char-index "()" , \( \) 2) => nil
+    (get-paired-char-index "("  , \( \) 0)   => nil
+    (get-paired-char-index ")"  , \( \) 0)   => nil
+    (get-paired-char-index "(()", \( \) 0)   => nil))
+
 ;; dotted-get
 (facts "dotted-get function should work fine."
   (let [data {:a {:b {:c 1} :d 2} :e 3 :. 4 nil 5}]
