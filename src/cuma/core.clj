@@ -52,20 +52,19 @@
 
 ; =render-section
 (defn- render-section
-  ([s data] (render-section s data 0))
-  ([s data from]
-   (if-let [sec-start (index-of s "@(" from)]
-     (let [{:keys [f args body all]} (parse-section s data sec-start)
-           f    (dotted-get data (str f))
-           args (map #(if (symbol? %) (dotted-get data (str %)) %) args)]
-       (if f
-         (let [res (str (apply f (concat (list data body) args)))]
-           (recur
-             (str/replace-first s all res)
-             data
-             (+ sec-start (count res))))
-         s))
-     s)))
+  [s data from]
+  (if-let [sec-start (index-of s "@(" from)]
+    (let [{:keys [f args body all]} (parse-section s data sec-start)
+          f    (dotted-get data (str f))
+          args (map #(if (symbol? %) (dotted-get data (str %)) %) args)]
+      (if f
+        (let [res (str (apply f (concat (list data body) args)))]
+          (recur
+            (str/replace-first s all res)
+            data
+            (+ sec-start (count res))))
+        s))
+    s))
 
 ; =render
 (defn render
@@ -75,5 +74,5 @@
                  (collect-extension-functions-memo)
                  data)]
     (-> s
-      (render-section m)
+      (render-section m 0)
       (render-variable m))))
