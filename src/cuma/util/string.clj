@@ -34,8 +34,8 @@
            (nth (indexes-of s end (inc i)) (dec n) nil)))))))
 
 ; =dotted-get
-(defn dotted-get [data dotted]
-  (let [arr (if (and (string? dotted) (not= "." dotted))
-              (str/split dotted #"\.")
-              [dotted])]
-    (reduce #(get % (keyword %2)) data arr)))
+(defn dotted-get
+  [data dotted]
+  (if (and (string? dotted) (not= "." dotted))
+    (reduce #(get % (keyword %2)) data (str/split dotted #"\."))
+    (get data (keyword dotted))))

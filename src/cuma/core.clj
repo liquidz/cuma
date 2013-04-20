@@ -4,6 +4,8 @@
     [cuma.extension   :refer [collect-extension-functions-memo]]
     [clojure.string   :as    str]))
 
+(def read-string* (memoize read-string))
+
 ; =escape
 (defn escape
   "Escape string."
@@ -18,11 +20,11 @@
 (defn- render-variable
   [s data]
   (str/replace
-    s #"\$\(\s*(.+?)\s*\)"
+    s #"\$(\(\s*.+?\s*\))"
     (fn [[all x]]
-      (let [[a & b :as ls] (str/split x #"\s+")
-            f    (dotted-get data (if-not (empty? b) a))
-            args (map #(dotted-get data %) (if (empty? b) [a] b))
+      (let [[a & b :as ls] (read-string* x)
+            f    (dotted-get data (str (if-not (empty? b) a)))
+            args (map #(if (symbol? %) (dotted-get data (str %)) %) (if (empty? b) [a] b))
             res (if (> (count ls) 1)
                   (if f (apply f data args) all)
                   (first args))]
@@ -36,8 +38,8 @@
 (defn- parse-section
   [s data from]
   (if-let [body-start (index-of s ")" from)]
-    (let [start-str   (str/trim (.substring s (+ 2 from) body-start))
-          [f & args]  (str/split start-str #"\s")
+    (let [start-str   (str/trim (.substring s (inc from) (inc body-start)))
+          [f & args]  (read-string* start-str)
           end-str     "@(end)"
           end-len     6]
       (if-let [body-end (get-paired-index s "@(" end-str from)]
@@ -54,8 +56,8 @@
   ([s data from]
    (if-let [sec-start (index-of s "@(" from)]
      (let [{:keys [f args body all]} (parse-section s data sec-start)
-           f    (dotted-get data f)
-           args (map #(dotted-get data %) args)]
+           f    (dotted-get data (str f))
+           args (map #(if (symbol? %) (dotted-get data (str %)) %) args)]
        (if f
          (let [res (str (apply f (concat (list data body) args)))]
            (recur

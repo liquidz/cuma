@@ -58,6 +58,15 @@
     (render "$(f.g a.b)" {:f {:g upper} :a {:b "foo"}}) => "FOO"
     (render "$(f.g a.b)" {:f {:g upper} :a "foo"})      => "err")
 
+  (fact "In replacing variable, normal value should be handled as itself."
+    (render "$(\"foo\")"   {})             => "foo"
+    (render "$(:foo)"      {})             => ":foo"
+    (render "$(123)"       {})             => "123"
+    (render "$({1 1})"     {})             => "{1 1}"
+    (render "$([1 2])"     {})             => "[1 2]"
+    (render "$(f 1)"       {:f #(inc %2)}) => "2"
+    (render "$(f \"a b\")" {:f upper})     => "A B")
+
   (fact "Section should be replaced."
     (let [{:keys [body data arg1 arg2]} section]
       (render "@(f)foo@(end)"   {:f body})               => "foo"
@@ -89,6 +98,14 @@
       (render "@(f.g)foo@(end)"     {:f {:g body}})               => "foo"
       (render "@(f a.b)foo@(end)"     {:f arg1 :a {:b "bar"}})    => "bar"
       (render "@(f.g a.b)foo@(end)" {:f {:g arg1} :a {:b "bar"}}) => "bar"))
+
+  (fact "In replacing section, normal value should be handled as itself."
+    (let [{:keys [body arg1 arg2]} section]
+      (render "@(f \"foo\")bar@(end)" {:f arg1}) => "foo"
+      (render "@(f 123)bar@(end)"     {:f arg1}) => "123"
+      (render "@(f :foo)bar@(end)"    {:f arg1}) => ":foo"
+      (render "@(f {1 1})bar@(end)"   {:f arg1}) => "{1 1}"
+      (render "@(f [1 2])bar@(end)"   {:f arg1}) => "[1 2]"))
 
   (fact "Complex pattern should be rendered correctly."
     (render "$(a)-$(b)" {:a "$(b)" :b "c"})       => "$(b)-c"
