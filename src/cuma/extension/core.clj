@@ -47,3 +47,8 @@
 ; =comment
 (defn ^{:extension-name 'comment}
   comment* [& _] "")
+
+; =let
+(defn ^{:extension-name 'let}
+  let* [data body & args]
+  ((:render data) body (merge data (apply hash-map args))))

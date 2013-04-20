@@ -73,3 +73,11 @@
   (render "@(comment)$(x)@(end)" {})                     => ""
   (render "@(comment)$(x)@(end)" {:x "foo"})             => ""
   (render "@(comment)@(if x)foo@(end)@(end)" {:x "foo"}) => "")
+
+
+(fact "let extension should work fine."
+  (render "@(let :x \"foo\")$(x)@(end)" {}) => "foo"
+  (render "@(let :x \"foo\")$(x)@(end)" {:x "x"}) => "foo"
+  (render "@(let :x 123)$(x)@(end)" {}) => "123"
+  (render "@(let :x 1 :y 2)$(x)-$(y)@(end)" {}) => "1-2"
+  )
