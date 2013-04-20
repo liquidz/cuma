@@ -1,6 +1,6 @@
 (ns cuma.core
   (:require
-    [cuma.util.string :refer [index-of get-paired-index dotted-get]]
+    [cuma.util.string :refer [index-of get-paired-string-index dotted-get]]
     [cuma.extension   :refer [collect-extension-functions-memo]]
     [clojure.string   :as    str]))
 
@@ -12,9 +12,9 @@
   [s]
   (if (string? s)
     (-> s (str/replace #"&"  "&amp;")
-            (str/replace #"\"" "&quot;")
-            (str/replace #"<"  "&lt;")
-            (str/replace #">"  "&gt;"))))
+          (str/replace #"\"" "&quot;")
+          (str/replace #"<"  "&lt;")
+          (str/replace #">"  "&gt;"))))
 
 ; =render-variable
 (defn- render-variable
@@ -23,9 +23,10 @@
     s #"\$(\(\s*.+?\s*\))"
     (fn [[all x]]
       (let [[a & b :as ls] (read-string* x)
-            f    (dotted-get data (str (if-not (empty? b) a)))
-            args (map #(if (symbol? %) (dotted-get data (str %)) %) (if (empty? b) [a] b))
-            res (if (> (count ls) 1)
+            b?   (seq b)
+            f    (dotted-get data (str (if b? a)))
+            args (map #(if (symbol? %) (dotted-get data (str %)) %) (if b? b [a]))
+            res (if (next ls)
                   (if f (apply f data args) all)
                   (first args))]
         (if (and (map? res) (contains? res :body))
@@ -37,12 +38,13 @@
 ; =parse-section
 (defn- parse-section
   [s data from]
-  (if-let [body-start (index-of s ")" from)]
+  ;(if-let [body-start (index-of s ")" from)]
+  (if-let [body-start (get-paired-string-index s  "(" ")" (+ 2 from))]
     (let [start-str   (str/trim (.substring s (inc from) (inc body-start)))
           [f & args]  (read-string* start-str)
           end-str     "@(end)"
           end-len     6]
-      (if-let [body-end (get-paired-index s "@(" end-str from)]
+      (if-let [body-end (get-paired-string-index s "@(" end-str from)]
         {:f    f
          :args args
          :body (str/replace (.substring s (inc body-start) body-end) #"^[\r\n]+" "")
@@ -76,3 +78,21 @@
     (-> s
       (render-section m 0)
       (render-variable m))))
+
+;(defn -main []
+;  (println
+;    (let [s "@(let :x \"@(let :x 1)$(x)@(end)\")$(x)@(end)"
+;          from (index-of s "@(" 0)
+;          ]
+;
+;      (println (str "s = [" s "]"))
+;      (println (str "from = " from))
+;
+;      (when-let [body-start (get-paired-index s  "(" ")" (+ 2 from))]
+;        (let [start-str   (str/trim (.substring s (inc from) (inc body-start)))]
+;          (println (str "[" start-str "]"))
+;          )
+;        )
+;      )
+;    )
+;  )

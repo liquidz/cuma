@@ -21,9 +21,9 @@
           (map first)
           (take-while (comp not nil?))))))
 
-; =get-paired-index
-(defn get-paired-index
-  ([s start end] (get-paired-index s start end 0))
+; =get-paired-string-index
+(defn get-paired-string-index
+  ([s start end] (get-paired-string-index s start end 0))
   ([s start end from]
    (let [t (+ (count start) from)
          i (index-of s end from)]
@@ -39,3 +39,24 @@
   (if (and (string? dotted) (not= "." dotted))
     (reduce #(get % (keyword %2)) data (str/split dotted #"\."))
     (get data (keyword dotted))))
+
+(defn replace-first-from*
+  [s match replacement from]
+  (if-let [i (index-of s match from)]
+    (str
+      (.substring s 0 i)
+      replacement
+      (.substring s (+ i (count match))))
+    s
+    )
+  )
+
+(defn replace-first-from
+  [s match replacement from]
+  (if (or (< from 0) (> from (count s)))
+    s
+    (str
+      (.substring s 0 from)
+      (str/replace-first (.substring s from) match replacement))
+  )
+  )
