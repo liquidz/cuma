@@ -34,18 +34,18 @@
            (nth (indexes-of s end (inc i)) (dec n) nil)))))))
 
 ; =get-paired-char-index
-(defn get-paired-char-index
-  [s start end from]
-   (let [len (count s)]
-     (loop [i from, level 0, start? false]
-       (cond
-         (and start? (zero? level)) (dec i)
-         (>= i len) nil
-         :else (let [c (.charAt s i), i* (inc i)]
-                 (cond
-                   (= start c) (recur i* (inc level) true)
-                   (= end c)   (recur i* (dec level) start?)
-                   :else       (recur i* level start?)))))))
+;(defn get-paired-char-index
+;  [s start end from]
+;   (let [len (count s)]
+;     (loop [i from, level 0, start? false]
+;       (cond
+;         (and start? (zero? level)) (dec i)
+;         (>= i len) nil
+;         :else (let [c (.charAt s i), i* (inc i)]
+;                 (cond
+;                   (= start c) (recur i* (inc level) true)
+;                   (= end c)   (recur i* (dec level) start?)
+;                   :else       (recur i* level start?)))))))
 
 ; =dotted-get
 (defn dotted-get
@@ -54,23 +54,3 @@
     (reduce #(get % (keyword %2)) data (str/split dotted #"\."))
     (get data (keyword dotted))))
 
-(defn replace-first-from*
-  [s match replacement from]
-  (if-let [i (index-of s match from)]
-    (str
-      (.substring s 0 i)
-      replacement
-      (.substring s (+ i (count match))))
-    s
-    )
-  )
-
-(defn replace-first-from
-  [s match replacement from]
-  (if (or (< from 0) (> from (count s)))
-    s
-    (str
-      (.substring s 0 from)
-      (str/replace-first (.substring s from) match replacement))
-  )
-  )

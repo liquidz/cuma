@@ -79,9 +79,4 @@
   (render "@(let :x \"foo\")$(x)@(end)"       {})        => "foo"
   (render "@(let :x \"foo\")$(x)@(end)"       {:x "x"})  => "foo"
   (render "@(let :x 123)$(x)@(end)"           {})        => "123"
-  (render "@(let :x 1 :y 2)$(x)-$(y)@(end)"   {})        => "1-2"
-  (render "@(let :x \"f$(x)\")$(x)@(end)"     {:x "oo"}) => "foo"
-  (render "@(let :x \"f$(x)$(y)\")$(x)@(end)" {:x "o" :y "o"}) => "foo"
-  (render "@(let :x \"b$(x)$(y)\")$(x)@(end)" {:x "a" :y "r"}) => "bar"
-  (render "@(let :x \"@(let :x 1)$(x)@(end)\")$(x)@(end)" {:x 0})       => "1"
-  (render "@(for arr)@(let :x \"n$(.)\")$(x)@(end)@(end)" {:arr [1 2]}) => "n1n2")
+  (render "@(let :x 1 :y 2)$(x)-$(y)@(end)"   {})        => "1-2")

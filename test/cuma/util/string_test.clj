@@ -53,24 +53,24 @@
     (get-paired-string-index "<%<%%>", "<%" "%>")   => nil))
 
 ;; get-paired-char-index
-(facts "get-paired-char-index function should work fine."
-  (fact "Paired character index should be found."
-    (get-paired-char-index "()" \( \) 0) => 1
-    (get-paired-char-index "(a)" \( \) 0) => 2
-    (get-paired-char-index "(a (b))" \( \) 0) => 6
-    (get-paired-char-index "(a (b))" \( \) 3) => 5
-    (get-paired-char-index "((a) b)" \( \) 0) => 6
-    (get-paired-char-index "(())" \( \) 0) => 3
-    (get-paired-char-index "(()())" \( \) 0) => 5
-    (get-paired-char-index "(()())" \( \) 1) => 2)
-
-  (fact "If paired character is not exists, nil should be returned."
-    (get-paired-char-index ""   , \( \) 0)   => nil
-    (get-paired-char-index "()" , \( \) 1) => nil
-    (get-paired-char-index "()" , \( \) 2) => nil
-    (get-paired-char-index "("  , \( \) 0)   => nil
-    (get-paired-char-index ")"  , \( \) 0)   => nil
-    (get-paired-char-index "(()", \( \) 0)   => nil))
+;(facts "get-paired-char-index function should work fine."
+;  (fact "Paired character index should be found."
+;    (get-paired-char-index "()" \( \) 0) => 1
+;    (get-paired-char-index "(a)" \( \) 0) => 2
+;    (get-paired-char-index "(a (b))" \( \) 0) => 6
+;    (get-paired-char-index "(a (b))" \( \) 3) => 5
+;    (get-paired-char-index "((a) b)" \( \) 0) => 6
+;    (get-paired-char-index "(())" \( \) 0) => 3
+;    (get-paired-char-index "(()())" \( \) 0) => 5
+;    (get-paired-char-index "(()())" \( \) 1) => 2)
+;
+;  (fact "If paired character is not exists, nil should be returned."
+;    (get-paired-char-index ""   , \( \) 0)   => nil
+;    (get-paired-char-index "()" , \( \) 1) => nil
+;    (get-paired-char-index "()" , \( \) 2) => nil
+;    (get-paired-char-index "("  , \( \) 0)   => nil
+;    (get-paired-char-index ")"  , \( \) 0)   => nil
+;    (get-paired-char-index "(()", \( \) 0)   => nil))
 
 ;; dotted-get
 (facts "dotted-get function should work fine."
@@ -88,15 +88,3 @@
       (dotted-get data "x")       => nil
       (dotted-get data "a.b.c.d") => nil
       (dotted-get data "")        => nil)))
-
-(facts "replace-first-from should work fine."
-  (let [s "foofoo"]
-    (fact "指定index以降の最初の文字列を置換できること"
-      (replace-first-from s "f" "x" 0) => "xoofoo"
-      (replace-first-from s "f" "x" 1) => "fooxoo"
-      (replace-first-from s "f" "x" 9) => "foofoo"
-      (replace-first-from s "fo" "" 0) => "ofoo"
-      (replace-first-from s "fo" "" 1) => "fooo")
-
-    (fact "存在しない文字列が指定された場合には置換されないこと"
-      (replace-first-from s "z" "x" 0) => "foofoo")))
