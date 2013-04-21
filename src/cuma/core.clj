@@ -1,6 +1,6 @@
 (ns cuma.core
   (:require
-    [cuma.util.string :refer [index-of get-paired-string-index dotted-get]]
+    [cuma.util.string :refer [index-of dotted-get get-paired-section-index]]
     [cuma.extension   :refer [collect-extension-functions-memo]]
     [clojure.string   :as    str]))
 
@@ -41,9 +41,8 @@
   (if-let [body-start (index-of s ")" from)]
     (let [start-str   (str/trim (.substring s (inc from) (inc body-start)))
           [f & args]  (read-string* start-str)
-          end-str     "@(end)"
-          end-len     6]
-      (if-let [body-end (get-paired-string-index s "@(" end-str from)]
+          end-len     6] ; "@(end)" => 6
+      (if-let [body-end (get-paired-section-index s from)]
         {:f    f
          :args args
          :body (str/replace (.substring s (inc body-start) body-end) #"^[\r\n]+" "")
@@ -77,3 +76,4 @@
     (-> s
       (render-section m 0)
       (render-variable m))))
+

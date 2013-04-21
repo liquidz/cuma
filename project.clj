@@ -1,4 +1,4 @@
-(defproject cuma "0.0.3"
+(defproject cuma "0.0.4"
   :description "Extensible micro template engine for Clojure"
   :url         "https://github.com/liquidz/cuma"
 

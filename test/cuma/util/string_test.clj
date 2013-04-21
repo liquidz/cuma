@@ -6,51 +6,53 @@
 
 ;; indexes-of
 (facts "indexes-of function should work fine."
-  (fact "All indexes should be appered."
-    (indexes-of "hello" "l")   => [2 3]
-    (indexes-of "hello" "l" 3) => [3]
-    (indexes-of "hello" "l" 4) => []
-    (indexes-of "hello" "x")   => []
-    (indexes-of "hello" "x" 3) => [])
+  (let [f (fn [& args] (take-while (comp not nil?) (apply indexes-of args)))]
+    (fact "All indexes should be appered."
+      (f "hello" "l" 0) => [2 3]
+      (f "hello" "l" 3) => [3]
+      (f "hello" "l" 4) => []
+      (f "hello" "x" 0) => []
+      (f "hello" "x" 3) => [])
 
-  (fact "Empty string should be handleable."
-    (indexes-of "" "")    => [0]
-    (indexes-of "" "" 3)  => [0]
-    (indexes-of "" "x")   => []
-    (indexes-of "" "x" 3) => []))
+    (fact "Empty string should be handleable."
+      (f "" "" 0)  => [0]
+      (f "" "" 3)  => [0]
+      (f "" "x" 0) => []
+      (f "" "x" 3) => [])))
 
-;; get-paired-string-index
-(facts "get-paired-string-index function should work fine."
-  (fact "Paired character index should be found."
-    (get-paired-string-index "()"      , "(" ")")   => 1
-    (get-paired-string-index "(a)"     , "(" ")")   => 2
-    (get-paired-string-index "(a (b))" , "(" ")")   => 6
-    (get-paired-string-index "(a (b)))", "(" ")")   => 6
-    (get-paired-string-index "(a (b))" , "(" ")" 3) => 5
-    (get-paired-string-index "((a) b)" , "(" ")")   => 6)
+;; count-string
+(facts "count-string function should work fine."
+  (fact "Num of string should be correct."
+    (count-string "foo" #"o") => 2
+    (count-string "o" #"o") => 1)
 
-  (fact "If paired character is not exists, nil should be returned."
-    (get-paired-string-index ""   , "(" ")")   => nil
-    (get-paired-string-index "()" , "(" ")" 1) => nil
-    (get-paired-string-index "()" , "(" ")" 2) => nil
-    (get-paired-string-index "("  , "(" ")")   => nil
-    (get-paired-string-index ")"  , "(" ")")   => nil
-    (get-paired-string-index "(()", "(" ")")   => nil)
+  (fact "If string is empty or target string is not exists, 0 should be returned".
+    (count-string "" #"o") => 0
+    (count-string "x" #"o") => 0))
 
+;; get-paired-section-index
+(facts "get-paired-section-index function should work fine."
   (fact "Paired string index should be found."
-    (get-paired-string-index "<%%>"    , "<%" "%>")   => 2
-    (get-paired-string-index "<% %>"   , "<%" "%>")   => 3
-    (get-paired-string-index "<%%_%>"  , "<%" "%>")   => 4
-    (get-paired-string-index "<%<%%>%>", "<%" "%>")   => 6
-    (get-paired-string-index "<%<%%>%>", "<%" "%>" 1) => 4)
+    (get-paired-section-index "@(x)@(end)"            , 0) => 4
+    (get-paired-section-index "@(x) @(end)"           , 0) => 5
+    (get-paired-section-index "@(x)@@(end)"           , 0) => 5
+    (get-paired-section-index "@(x)@(end)@(end)"      , 0) => 4
+    (get-paired-section-index "@(x)@(y)@(end)@(end)"  , 0) => 14
+    (get-paired-section-index "@(x)__@(y)@(end)@(end)", 0) => 16
+    (get-paired-section-index "@(x)@(y)@(end)__@(end)", 0) => 16
+    (get-paired-section-index "@(x)@(y)@(end)@(end)"  , 1) => 8
+    (get-paired-section-index "@(x)@(y)@(end)__@(end)", 1) => 8)
 
   (fact "If paired string is not exists, nil should be returned."
-    (get-paired-string-index ""      , "<%" "%>")   => nil
-    (get-paired-string-index "<%%>"  , "<%" "%>" 1) => nil
-    (get-paired-string-index "<%%>"  , "<%" "%>" 2) => nil
-    (get-paired-string-index "<%%>"  , "<%" "%>" 3) => nil
-    (get-paired-string-index "<%"    , "<%" "%>")   => nil
-    (get-paired-string-index "<%<%%>", "<%" "%>")   => nil))
+    (get-paired-section-index ""              , 0) => nil
+    (get-paired-section-index "@("            , 0) => nil
+    (get-paired-section-index "@(x)@(end)"    , 1) => nil
+    (get-paired-section-index "@(x)@(end)"    , 2) => nil
+    (get-paired-section-index "@(x)@(end)"    , 3) => nil
+    (get-paired-section-index "@(x)"          , 0) => nil
+    (get-paired-section-index "@(end)"        , 0) => nil
+    (get-paired-section-index "@(x)@(y)@(end)", 0) => nil
+    (get-paired-section-index "@(x)@(y)@(end" , 0) => nil))
 
 ;; get-paired-char-index
 ;(facts "get-paired-char-index function should work fine."
