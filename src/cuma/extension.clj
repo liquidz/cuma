@@ -1,5 +1,7 @@
 (ns cuma.extension
-  (:require [cuma.extension.core]))
+  (:require
+    cuma.extension.core
+    cuma.extension.date))
 
 (def ^:dynamic *extension-ns-regexp*
   #"^cuma\.extension\.")

@@ -39,7 +39,7 @@
     (render "[$(x)]" {})       => "[]"
     (render "[$(x)]" {:x nil}) => "[]")
 
-  (fact "Custrom function should be applied to variable."
+  (fact "Custom function should be applied to variable."
     (render "$(upper x)" {:upper upper :x "foo"}) => "FOO"
     (render "$(upper x)" {:upper upper :x ""})    => ""
     (render "$(upper x)" {:upper upper})          => "err"
