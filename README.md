@@ -104,6 +104,13 @@ Map data is expanded to variable in `for` section.
 ;=> 13 14 23 24
 ```
 
+#### let section
+
+```clojure
+(render "@(let :x \"foo\" :y 123) $(x) $(y) @(end)" {})
+;=> foo 123
+```
+
 #### custom section
 ```clojure
 (render "@(foo) world @(end)" {:foo (fn [data body] (str "hello " body))})
@@ -170,6 +177,12 @@ https://github.com/liquidz/cuma/blob/master/src/cuma/extension/core.clj
   [data body & args]
   ((:render data) (str "hello" body)))
 ```
+
+## Performance
+test code: https://gist.github.com/liquidz/5381090
+
+<img src="https://docs.google.com/spreadsheet/oimg?key=0AtD8N5xmx-U-dENUYTNQdWJwSUxXWkhyQjFfOXJMUHc&oid=5&zx=hiajw6lpi9ae" />
+
 
 ## License
 
