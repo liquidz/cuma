@@ -140,7 +140,7 @@ Map data is expanded to variable in `for` section.
 Replacing variable and section are allowd to use custom function,
 and cuma allows you to make custon function as extension.
 
-Cuma searches `cuma.extension.*` namespaces, and load all public functions ad extension.
+Cuma searches `cuma.extension.*` namespaces, and load all public functions as extension.
 
 `raw`, `->`, `include`, `if`, `for` are also extension.
 https://github.com/liquidz/cuma/blob/master/src/cuma/extension/core.clj
@@ -181,7 +181,7 @@ https://github.com/liquidz/cuma/blob/master/src/cuma/extension/core.clj
 ## Performance
 test code: https://gist.github.com/liquidz/5381090
 
-<img src="https://docs.google.com/spreadsheet/oimg?key=0AtD8N5xmx-U-dENUYTNQdWJwSUxXWkhyQjFfOXJMUHc&oid=5&zx=hiajw6lpi9ae" />
+<img src="https://docs.google.com/spreadsheet/oimg?key=0AtD8N5xmx-U-dENUYTNQdWJwSUxXWkhyQjFfOXJMUHc&oid=5&zx=p7l2q58ev5i3" />
 
 
 ## License
