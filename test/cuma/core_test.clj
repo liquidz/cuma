@@ -68,19 +68,21 @@
     (render "$(f \"a b\")" {:f upper})     => "A B")
 
   (fact "Section should be replaced."
-    (let [{:keys [body data arg1 arg2]} section]
+    (let [{:keys [body data arg1 arg2 quot dquot]} section]
       (render "@(f)foo@(end)"   {:f body})               => "foo"
       (render "@(f)@(end)"      {:f body})               => ""
       (render "@(f x)_@(end)"   {:f data :x "x"})        => "x"
       (render "@(f x y)_@(end)" {:f arg1 :x "x" :y "y"}) => "x"
-      (render "@(f x y)_@(end)" {:f arg2 :x "x" :y "y"}) => "y"))
+      (render "@(f x y)_@(end)" {:f arg2 :x "x" :y "y"}) => "y"
+      (render "@(f)$(x)@(end)@(g)$(y)@(end)" {:f quot :g dquot :x "x" :y "y"}) => "'x'\"y\""))
 
   (fact "Nested section should be replaced."
     (let [{f :quot, g :dquot} section]
-      (render "@(f)x @(f)y@(end)@(end)"       {:f f})             => "'x 'y''"
-      (render "@(f)$(x) @(f)$(x)@(end)@(end)" {:f f :x "a"})      => "'a 'a''"
-      (render "@(f)x @(g)y@(end)@(end)"       {:f f :g g})        => "'x \"y\"'"
-      (render "@(f)$(x) @(g)$(x)@(end)@(end)" {:f f :g g :x "a"}) => "'a \"a\"'"))
+      (render "@(f)x @(f)y@(end)@(end)"                {:f f})             => "'x 'y''"
+      (render "@(f)$(x) @(f)$(x)@(end)@(end)"          {:f f :x "a"})      => "'a 'a''"
+      (render "@(f)x @(g)y@(end)@(end)"                {:f f :g g})        => "'x \"y\"'"
+      (render "@(f)$(x) @(g)$(x)@(end)@(end)"          {:f f :g g :x "a"}) => "'a \"a\"'"
+      (render "@(f)@(g)$(x)@(end)@(g)$(x)@(end)@(end)" {:f f :g g :x "a"}) => "'\"a\"\"a\"'"))
 
   (fact "Nil section should not be replaced."
     (render "@(f)foo@(end)" {})       => "@(f)foo@(end)"

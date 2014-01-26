@@ -41,7 +41,11 @@
     (get-paired-section-index "@(x)__@(y)@(end)@(end)", 0) => 16
     (get-paired-section-index "@(x)@(y)@(end)__@(end)", 0) => 16
     (get-paired-section-index "@(x)@(y)@(end)@(end)"  , 1) => 8
-    (get-paired-section-index "@(x)@(y)@(end)__@(end)", 1) => 8)
+    (get-paired-section-index "@(x)@(y)@(end)__@(end)", 1) => 8
+    (get-paired-section-index "@(x)@(end)@(y)@(end)"  , 0) => 4
+    (get-paired-section-index "@(x)@(y)@(end)@(z)@(end)@(end)", 0)  => 24
+    (get-paired-section-index "@(x)@(y)@(end)@(z)@(end)@(end)", 1)  => 8
+    (get-paired-section-index "@(x)@(y)@(end)@(z)@(end)@(end)", 14) => 18)
 
   (fact "If paired string is not exists, nil should be returned."
     (get-paired-section-index ""              , 0) => nil
@@ -53,26 +57,6 @@
     (get-paired-section-index "@(end)"        , 0) => nil
     (get-paired-section-index "@(x)@(y)@(end)", 0) => nil
     (get-paired-section-index "@(x)@(y)@(end" , 0) => nil))
-
-;; get-paired-char-index
-;(facts "get-paired-char-index function should work fine."
-;  (fact "Paired character index should be found."
-;    (get-paired-char-index "()" \( \) 0) => 1
-;    (get-paired-char-index "(a)" \( \) 0) => 2
-;    (get-paired-char-index "(a (b))" \( \) 0) => 6
-;    (get-paired-char-index "(a (b))" \( \) 3) => 5
-;    (get-paired-char-index "((a) b)" \( \) 0) => 6
-;    (get-paired-char-index "(())" \( \) 0) => 3
-;    (get-paired-char-index "(()())" \( \) 0) => 5
-;    (get-paired-char-index "(()())" \( \) 1) => 2)
-;
-;  (fact "If paired character is not exists, nil should be returned."
-;    (get-paired-char-index ""   , \( \) 0)   => nil
-;    (get-paired-char-index "()" , \( \) 1) => nil
-;    (get-paired-char-index "()" , \( \) 2) => nil
-;    (get-paired-char-index "("  , \( \) 0)   => nil
-;    (get-paired-char-index ")"  , \( \) 0)   => nil
-;    (get-paired-char-index "(()", \( \) 0)   => nil))
 
 ;; dotted-get
 (facts "dotted-get function should work fine."

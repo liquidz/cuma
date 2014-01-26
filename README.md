@@ -8,7 +8,7 @@ Extensible micro template engine for Clojure.
 
 Add following dependency to your `profject.clj`.
 ```clojure
-[cuma "0.0.4"]
+[cuma "0.0.5"]
 ```
 
 ## Usage
@@ -186,6 +186,6 @@ test code: https://gist.github.com/liquidz/5381090
 
 ## License
 
-Copyright (C) 2013 Masashi Iizuka([@uochan](http://twitter.com))
+Copyright (C) 2014 Masashi Iizuka([@uochan](http://twitter.com))
 
 Distributed under the Eclipse Public License, the same as Clojure.

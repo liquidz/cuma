@@ -27,27 +27,15 @@
 ; =get-paired-section-index
 (defn get-paired-section-index
   [s from]
-  (if-let [i (index-of s "@(end)" from)]
-    (if (> i from)
-      (let [n (dec (count-string (.substring s from i) #"@\("))]
-        (cond
-          (neg? n)  nil
-          (zero? n) i
-          :else     (nth (indexes-of s "@(end)" i) n nil))))))
-
-; =get-paired-char-index
-;(defn get-paired-char-index
-;  [s start end from]
-;   (let [len (count s)]
-;     (loop [i from, level 0, start? false]
-;       (cond
-;         (and start? (zero? level)) (dec i)
-;         (>= i len) nil
-;         :else (let [c (.charAt s i), i* (inc i)]
-;                 (cond
-;                   (= start c) (recur i* (inc level) true)
-;                   (= end c)   (recur i* (dec level) start?)
-;                   :else       (recur i* level start?)))))))
+  (let [len (count s)]
+    (loop [from from, depth 0]
+      (if-let [i (index-of s "@(" from)]
+        (when (> len (+ i 5))
+          (if (= (subs s (+ i 2) (+ i 5)) "end") ; check 3 chars "@(123"
+            (if (= 1 depth)
+              i
+              (recur (+ i 4) (dec depth))) ; 4 => minimal sectin size "@(x)"
+            (recur (+ i 4) (inc depth))))))))
 
 ; =dotted-get
 (defn dotted-get

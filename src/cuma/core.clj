@@ -39,14 +39,14 @@
 (defn- parse-section
   [s data from]
   (if-let [body-start (index-of s ")" from)]
-    (let [start-str   (str/trim (.substring s (inc from) (inc body-start)))
+    (let [start-str   (str/trim (subs s (inc from) (inc body-start)))
           [f & args]  (read-string* start-str)
           end-len     6] ; "@(end)" => 6
       (if-let [body-end (get-paired-section-index s from)]
         {:f    f
          :args args
-         :body (str/replace (.substring s (inc body-start) body-end) #"^[\r\n]+" "")
-         :all  (.substring s from (+ body-end end-len))}
+         :body (str/replace (subs s (inc body-start) body-end) #"^[\r\n]+" "")
+         :all  (subs s from (+ body-end end-len))}
         s))
     s))
 
