@@ -181,6 +181,7 @@ https://github.com/liquidz/cuma/blob/master/src/cuma/extension/core.clj
 ## Performance
 test code: https://gist.github.com/liquidz/5381090
 
+Unit: millisec
 <img src="https://docs.google.com/spreadsheet/oimg?key=0AtD8N5xmx-U-dENUYTNQdWJwSUxXWkhyQjFfOXJMUHc&oid=5&zx=p7l2q58ev5i3" />
 
 
