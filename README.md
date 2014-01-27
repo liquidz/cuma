@@ -148,7 +148,7 @@ https://github.com/liquidz/cuma/blob/master/src/cuma/extension/core.clj
 ### Variable Extension
 
 ```clojure
-(render "$(f x y z)" {:x 1 : y 2 :z 3 :foo "bar"})
+(render "$(f x y z)" {:x 1 :y 2 :z 3 :foo "bar"})
 ```
 
 ```clojure
