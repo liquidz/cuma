@@ -3,7 +3,7 @@
     [clojure.string :as str]))
 
 ; =index-of
-(defn index-of [s target from]
+(defn index-of [^String s ^String target from]
   (let [i (.indexOf s target from)]
     (if (not= -1 i) i)))
 
