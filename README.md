@@ -3,6 +3,7 @@
 Extensible micro template engine for Clojure.
 
 [![Build Status](https://travis-ci.org/liquidz/cuma.png?branch=master)](https://travis-ci.org/liquidz/cuma)
+[![Dependency Status](https://www.versioneye.com/user/projects/52f62f2dec137564ea000204/badge.png)](https://www.versioneye.com/user/projects/52f62f2dec137564ea000204)
 
 ## Installation
 
