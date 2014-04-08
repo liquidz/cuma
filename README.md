@@ -9,7 +9,7 @@ Extensible micro template engine for Clojure.
 
 Add following dependency to your `profject.clj`.
 ```clojure
-[cuma "0.0.6"]
+[cuma "0.0.7"]
 ```
 
 ## Usage

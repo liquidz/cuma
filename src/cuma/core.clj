@@ -22,11 +22,11 @@
   (str/replace
     s #"\$(\(\s*.+?\s*\))"
     (fn [[all x]]
-      (let [[a & b :as ls] (read-string* x)
+      (let [[a & b] (read-string* x)
             b?   (seq b)
-            f    (dotted-get data (str (if b? a)))
+            f    (if b? (dotted-get data (str a)))
             args (map #(if (symbol? %) (dotted-get data (str %)) %) (if b? b [a]))
-            res (if (next ls)
+            res (if b?
                   (if f (apply f data args) all)
                   (first args))]
         (if (and (map? res) (contains? res :body))
