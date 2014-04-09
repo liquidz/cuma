@@ -8,10 +8,8 @@ Extensible micro template engine for Clojure.
 ## Installation
 
 Add following dependency to your `profject.clj`.
-```clojure
-[cuma "0.0.7"]
-```
 
+[![cuma](https://clojars.org/cuma/latest-version.svg)](https://clojars.org/cuma)
 ## Usage
 
 require `[cure.core :refer [render]]`
