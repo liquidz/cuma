@@ -1,4 +1,4 @@
-(defproject cuma "0.0.7"
+(defproject cuma "0.0.8"
   :description "Extensible micro template engine for Clojure"
   :url         "https://github.com/liquidz/cuma"
 
@@ -7,7 +7,7 @@
 
   :dependencies [[org.clojure/clojure "1.6.0"]
                  ; cuma.extension.date
-                 [clj-time "0.6.0"]]
+                 [clj-time "0.7.0"]]
   :profiles {:dev {:dependencies [[midje "1.6.3"  :exclusions [org.clojure/clojure]]]}}
   :plugins [[lein-midje "3.1.3"]]
 
