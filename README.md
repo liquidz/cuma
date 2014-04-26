@@ -12,7 +12,7 @@ Add following dependency to your `profject.clj`.
 [![cuma](https://clojars.org/cuma/latest-version.svg)](https://clojars.org/cuma)
 ## Usage
 
-require `[cure.core :refer [render]]`
+require `[cuma.core :refer [render]]`
 
 ### Replace Variable
 
