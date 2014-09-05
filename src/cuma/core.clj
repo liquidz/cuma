@@ -10,11 +10,11 @@
 (defn escape
   "Escape string."
   [s]
-  (if (string? s)
-    (-> s (str/replace #"&"  "&amp;")
-          (str/replace #"\"" "&quot;")
-          (str/replace #"<"  "&lt;")
-          (str/replace #">"  "&gt;"))))
+  {:pre [(string? s)]}
+  (-> s (str/replace #"&"  "&amp;")
+        (str/replace #"\"" "&quot;")
+        (str/replace #"<"  "&lt;")
+        (str/replace #">"  "&gt;")))
 
 ; =render-variable
 (defn- render-variable
@@ -37,7 +37,7 @@
 
 ; =parse-section
 (defn- parse-section
-  [s data from]
+  [s data ^long from]
   (if-let [body-start (index-of s ")" from)]
     (let [start-str   (str/trim (subs s (inc from) (inc body-start)))
           [f & args]  (read-string* start-str)
