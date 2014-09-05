@@ -7,18 +7,6 @@
   (let [i (.indexOf s target from)]
     (if (not= -1 i) i)))
 
-; =indexes-of
-(defn indexes-of
-  [s target ^long from]
-  (if (str/blank? target)
-    [(min (count s) from)]
-    (->> (iterate
-           #(if % (if-let [i (index-of s target (second %))]
-                    [i (inc i)]))
-           [-1 from])
-         rest
-         (map first))))
-
 ; =count-string
 (defn count-string
   [s target-regexp]
