@@ -4,22 +4,6 @@
     [midje.sweet      :refer :all]
     [clojure.string   :as str]))
 
-;; indexes-of
-(facts "indexes-of function should work fine."
-  (let [f (fn [& args] (take-while (comp not nil?) (apply indexes-of args)))]
-    (fact "All indexes should be appered."
-      (f "hello" "l" 0) => [2 3]
-      (f "hello" "l" 3) => [3]
-      (f "hello" "l" 4) => []
-      (f "hello" "x" 0) => []
-      (f "hello" "x" 3) => [])
-
-    (fact "Empty string should be handleable."
-      (f "" "" 0)  => [0]
-      (f "" "" 3)  => [0]
-      (f "" "x" 0) => []
-      (f "" "x" 3) => [])))
-
 ;; count-string
 (facts "count-string function should work fine."
   (fact "Num of string should be correct."

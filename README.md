@@ -110,6 +110,32 @@ Map data is expanded to variable in `for` section.
 ;=> foo 123
 ```
 
+#### layout-file section
+
+layout with implicit variable `.`
+
+ * layout.tpl
+```
+hello $(.)
+```
+ * your code
+```clojure
+(render "@(layout-file \"layout.tpl\")world@(end)" {})
+;=> helo world
+```
+
+layout with `block` section (`block` section can be used only in `layout-file` section)
+
+ * layout.tpl
+```
+a = $(a), b = $(b)
+```
+ * your code
+```clojure
+(render "@(layout-file \"layout.pl\") @(block :a)hello@(end) @(block :b)world@(end) @(end)" {})
+;=> a = hello, b = world
+```
+
 #### custom section
 ```clojure
 (render "@(foo) world @(end)" {:foo (fn [data body] (str "hello " body))})
@@ -133,8 +159,7 @@ Map data is expanded to variable in `for` section.
 (render "$(f (g x))" {...})
 ```
 
-
-## Extension
+## Writing Extension
 
 Replacing variable and section are allowd to use custom function,
 and cuma allows you to make custon function as extension.
@@ -178,7 +203,9 @@ https://github.com/liquidz/cuma/blob/master/src/cuma/extension/core.clj
 ```
 
 ## Performance
-test code: https://gist.github.com/liquidz/5381090
+
+Benchmarking is powered by [criterium](https://github.com/hugoduncan/criterium).
+Test code is [here](https://github.com/liquidz/benchmark).
 
 ![cuma performance](performance.png)
 
