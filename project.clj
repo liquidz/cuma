@@ -7,7 +7,7 @@
 
   :dependencies [[org.clojure/clojure "1.6.0"]
                  ; cuma.extension.date
-                 [clj-time "0.8.0"]
+                 [clj-time "0.9.0"]
                  ; cuma.extension.layout
                  [filemodc "0.0.2"]]
 
