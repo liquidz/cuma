@@ -212,6 +212,6 @@ Test code is [here](https://github.com/liquidz/benchmark).
 
 ## License
 
-Copyright (C) 2014 Masashi Iizuka([@uochan](http://twitter.com))
+Copyright (C) 2015 Masashi Iizuka([@uochan](http://twitter.com))
 
 Distributed under the Eclipse Public License, the same as Clojure.

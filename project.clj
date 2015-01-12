@@ -1,4 +1,4 @@
-(defproject cuma "0.1.0"
+(defproject cuma "0.1.1"
   :description "Extensible micro template engine for Clojure"
   :url         "https://github.com/liquidz/cuma"
 
@@ -13,5 +13,5 @@
 
   :profiles {:dev {:global-vars {*warn-on-reflection* true}
                    :dependencies [[midje "1.6.3"  :exclusions [org.clojure/clojure]]
-                                  [org.clojars.runa/conjure "2.1.3"]]}}
+                                  [org.clojars.runa/conjure "2.2.0"]]}}
   :plugins [[lein-midje "3.1.3"]])
